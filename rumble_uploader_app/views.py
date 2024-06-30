@@ -18,7 +18,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 from django.core.exceptions import ObjectDoesNotExist
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 import logging
-from .rumble_uploader import rumble_video_links_return_data
+# from .rumble_uploader import rumble_video_links_return_data
 
 # Add this line to import the logger module
 logger = logging.getLogger(__name__)
@@ -36,7 +36,8 @@ from .models import RumbleVideo, YouTubeVideo, YouTubeURL
 from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
-import rumble_uploader_app.rumble_uploader as rumble_uploader
+from rumble_uploader_app.rumble_uploader import upload_to_rumble
+
 
 
 
@@ -340,7 +341,7 @@ def run_rumble_script(request, pk):
         # Serialize to JSON
         serialized_data = json.dumps(rumble_video_script_data)
         # print(rumble_video_script_data)
-        rumble_uploader.upload_rumble_video(serialized_data)
+        upload_to_rumble(serialized_data)
         print(rumble_video_detail)
         print(rumble_video_links_return_data)
 

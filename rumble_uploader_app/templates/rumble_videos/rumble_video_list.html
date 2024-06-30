@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>Rumble Video List</h1>
+    <div class="table table-dark h-100">
+        <table class="table table-dark" style="table-layout: auto; width: 100%;">
+            <thead>
+                <tr>
+                    <th>Rumble Account</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Primary Category</th>
+                    <th>Secondary Category</th>
+                    <th>Tags</th>
+                    <th>Upload Date</th>
+                    <th>Visibility</th>
+                    <th>Video File</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for rumble_video in rumble_videos %}
+                    <tr>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_account }}</td>
+                        <td style="word-wrap: break-word;"><a href="{% url 'rumble_video_detail' rumble_video.pk %}">{{ rumble_video.rumble_video_title }}</a></td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_video_description }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_primary_category }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_secondary_category }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_rumble_tags }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_upload_date }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_visibility }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_video_file }}</td>
+                        <td style="word-wrap: break-word;">
+                            <form method="POST" action="{% url 'rumble_video_delete' rumble_video.pk %}">
+                                {% csrf_token %}
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                        <td>
+                            <form method="GET" action="{% url 'rumble_video_update' rumble_video.pk %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="rumble_video_pk" value="{{ rumble_video.pk }}">
+                                <input type="submit" value="Update">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'run_rumble_script' rumble_video.pk %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="rumble_video_pk" value="{{ rumble_video.pk }}">
+                                <button type="submit">Run Rumble Script</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

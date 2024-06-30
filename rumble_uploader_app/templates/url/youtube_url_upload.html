@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <h1>Youtube URL Downloader</h1>
+</div>
+{% if success_message %}
+<div class="alert alert-success" role="alert">
+  {{ success_message }}
+</div>
+{% endif %}
+<form action="{% url 'scrape_youtube' %}" method="post">
+    {% csrf_token %}
+    <input type="text" name="youtube_link" placeholder="Enter YouTube link">
+    <button type="submit">Scrape YouTube Info</button>
+</form>
+<!--
+<form method="post" action="{% url 'youtube_url_upload' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+</form> -->
+{% endblock %}

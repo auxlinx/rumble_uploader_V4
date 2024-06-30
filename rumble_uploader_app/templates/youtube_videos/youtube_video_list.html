@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>YouTube Video List</h1>
+    <div class="table table-dark h-100">
+        <table class="table table-dark" style="table-layout: auto; width: 100%;">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>YT Video URL</th>
+                    <th>Channel</th>
+                    <th>View Count</th>
+                    <th>Posted Date</th>
+                    <th>Upload Date</th>
+                    <th>Video File</th>
+                    <th>Thumbnail</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for youtube_video in youtube_videos %}
+                    <tr>
+                         <td style="word-wrap: break-word;"><a href="{% url 'youtube_video_detail' youtube_video.pk %}">{{ youtube_video.youtube_video_title }}</a></td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_description }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_url }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_channel }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_view_count }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_published_date }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_upload_date }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_file }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_thumbnail }}</td>
+                         <td style="word-wrap: break-word;">
+                            <form method="POST" action="{% url 'youtube_video_delete' youtube_video.pk %}">
+                                {% csrf_token %}
+                                <input type="submit" value="Delete">
+                            </form>
+                        </td>
+                        <td>
+                            <form method="GET" action="{% url 'youtube_video_update' youtube_video.pk %}">
+                            {% csrf_token %}
+                            <input type="submit" value="Update">
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; first</a>
+                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+{% endblock %}

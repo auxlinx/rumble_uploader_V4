@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<body>
+    <div class="error-container">
+        <h1>Oops! Something went wrong.</h1>
+        <!-- Display the error message passed from the view -->
+        <p>{{ error }}</p>
+        <!-- Provide a link for the user to go back to the homepage or previous page -->
+        <a href="{% url 'home' %}">Go to Homepage</a>
+        <a href="javascript:history.back()">Go Back</a>
+    </div>
+</body>
+
+{% endblock %}

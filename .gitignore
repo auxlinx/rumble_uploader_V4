@@ -1,0 +1,48 @@
+# Dependency directories
+node_modules/
+bower_components/
+
+# Environment configuration files
+.env
+.env.local
+.env.*.local
+.env*  # Added to ignore all .env files
+env/*  # Ignoring all files within the env directory
+.env.scripts  # Ignoring environment scripts
+/env/
+.env.Lib  # Ignoring environment scripts
+
+
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-workspace
+
+# Build output directories
+/dist
+/tmp
+/out
+/build
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Debug files
+*.pdb
+*.map
+
+# Production files
+/config.production.json
+
+# Static files
+/static/

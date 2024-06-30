@@ -1,0 +1,48 @@
+volumes:
+  postgres_data: {}
+  pg-admin: {}
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+
+  pg-admin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    volumes:
+      - pg-admin:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_USERNAME : postgres
+      PGADMIN_DEFAULT_PASSWORD: postgres
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+
+  web:
+    build: .
+    restart: no
+    # entrypoint: /bin/sh -c "while true; do sleep 1000; done"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres

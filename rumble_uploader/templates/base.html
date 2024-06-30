@@ -1,0 +1,58 @@
+{% load static %}
+
+<html>
+    <head>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+        <link href="{% static 'style.css' %}" rel="stylesheet">
+    </head>
+    <body class="bg-dark text-white">
+        <div class="d-flex">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <!-- YouTube URL Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkYouTube" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                YouTube URLs
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkYouTube">
+                                <a class="dropdown-item" href="{% url 'youtube_url_upload' %}">Add YouTube URL</a>
+                                <a class="dropdown-item" href="{% url 'youtube_url_add' %}">Add Full YouTube URL</a>
+                                <a class="dropdown-item" href="{% url 'youtube_url_list' %}">YouTube URL List</a>
+                            </div>
+                        </li>
+                        <!-- YouTube video Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkYouTube" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                YouTube Videos
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkYouTube">
+                                <a class="dropdown-item" href="{% url 'youtube_upload_video' %}">YouTube Video Upload</a>
+                                <a class="dropdown-item" href="{% url 'youtube_video_list' %}">YouTube Video List</a>
+                            </div>
+                        </li>
+                        <!-- Rumble Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkRumble" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Rumble
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkRumble">
+                                <a class="dropdown-item" href="{% url 'rumble_upload_video' %}">Rumble Video Upload</a>
+                                <a class="dropdown-item" href="{% url 'rumble_video_list' %}">Rumble Video List</a>
+                                <a class="dropdown-item" href="{% url 'youtube_to_rumble_conversion_list' %}">YouTube to Rumble Conversion List</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <div class="my-5 text-center container">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>

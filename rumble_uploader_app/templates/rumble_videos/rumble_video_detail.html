@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ rumble_video.rumble_video_title }}</h1>
+    <p>{{ rumble_video.rumble_video_description }}</p>
+    <div></div>
+    <div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div> <!-- Added closing </div> tag -->
+    <table class="table table-dark" style="table-layout: auto; width: 100%;">
+        <thead>
+            <tr>
+                <th>Rumble Video URL</th>
+                <th>Rumble Account</th>
+                <th>Rumble Video Description</th>
+                <th>Rumble Video Primary Category</th>
+                <th>Rumble Video Secondary Category</th>
+                <th>Rumble Video Rumble Tags</th>
+                <th>Rumble Video Upload Date</th>
+                <th>Rumble Video Visibility</th>
+                <th>Rumble Video File</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_video_url }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_account }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_primary_category }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_secondary_category }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_rumble_tags }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_upload_date }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_visibility }}</td>
+                    <td style="word-wrap: break-word;">{{ rumble_video.rumble_video_file }}</td>
+                </tr>
+        </tbody>
+    </table>
+{% endblock %}

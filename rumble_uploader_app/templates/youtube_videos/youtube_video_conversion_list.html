@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h1>YouTube To Rumble Conversion List</h1>
+    <div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div class="full-screen-table-container"> <!-- Full-screen table container -->
+        <form method="POST" action="{% url 'convert_video' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="table table-dark h-100">
+                <table class="table table-dark" style="table-layout: auto; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>YT Title</th>
+                            <th>YT Description</th>
+                            <th>YT Video URL</th>
+                            <th>Video File</th>
+                            <th>Rumble Account</th>
+                            <th>Rumble Primary Category</th>
+                            <th>Rumble Secondary Category </th>
+                            <th>Rumble Tags</th>
+                            <th>Rumble Visibility</th>
+                            <th>Run YouTube to Rumble Conversion Script</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for youtube_video in youtube_videos %}
+                            <tr>
+                                <td style="word-wrap: break-word;"><a href="{% url 'youtube_video_detail' youtube_video.pk %}">{{ youtube_video.youtube_video_title }}</a></td>
+                                <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_description }}</td>
+                                <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_url }}</td>
+                                <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_file }}</td>
+                                <td>
+                                    <select name="rumble_accounts">
+                                    {% for account in rumble_accounts %}
+                                        <option value="{{ account }}">{{ account }}</option>
+                                    {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="rumble_video_primary_categories">
+                                        {% for category in rumble_video_primary_categories %}
+                                            <option value="{{ category }}">{{ category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select name="rumble_video_secondary_categories">
+                                        {% for category in rumble_video_secondary_categories %}
+                                            <option value="{{ category }}">{{ category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                    <!-- Large text box for Rumble Tags -->
+                                    <textarea name="rumble_tags" style="width: 100%; height: 100px;"></textarea>
+                                </td>
+                                <td>
+                                    <select name="rumble_video_visibility">
+                                        {% for category in rumble_video_visibility %}
+                                            <option value="{{ category }}">{{ category }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                                <td>
+                                        <input type="hidden" name="youtube_video_pk" value="{{ youtube_video.pk }}">
+                                        <button type="submit">Convert Video</button>
+                                    </form>
+                                </td>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">&laquo; first</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">next</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+
+
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            setTimeout(function() {
+                $(".alert").fadeOut('slow');
+            }, 5000); // 5 seconds
+        });
+        </script>
+{% endblock %}

@@ -36,6 +36,9 @@ from .models import RumbleVideo, YouTubeVideo, YouTubeURL
 from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
+import rumble_uploader_app.rumble_uploader as rumble_uploader
+
+
 
 # Load the .env file
 load_dotenv()
@@ -337,9 +340,9 @@ def run_rumble_script(request, pk):
         # Serialize to JSON
         serialized_data = json.dumps(rumble_video_script_data)
         # print(rumble_video_script_data)
-    subprocess.call(['python', 'rumble_uploader_app/rumble_uploader.py', serialized_data])
-    print(rumble_video_detail)
-    print(rumble_video_links_return_data)
+        rumble_uploader.upload_rumble_video(serialized_data)
+        print(rumble_video_detail)
+        print(rumble_video_links_return_data)
 
     return JsonResponse(rumble_video_links_return_data)
 

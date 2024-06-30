@@ -59,9 +59,19 @@ if len(sys.argv) != 2:
 # The second argument is the serialized JSON string
 serialized_data = sys.argv[1]
 
-# Deserialize the JSON string back into a Python dictionary
-rumble_video_data = json.loads(serialized_data)
+# # Deserialize the JSON string back into a Python dictionary
+# rumble_video_data = json.loads(serialized_data)
 
+# Assuming serialized_data is the variable you're trying to parse
+if serialized_data:
+    try:
+        rumble_video_data = json.loads(serialized_data)
+    except json.JSONDecodeError as e:
+        logging.error(f"Failed to decode JSON from serialized_data: {e}")
+        rumble_video_data = {}  # Provide a default value or handle the error as needed
+else:
+    logging.error("serialized_data is empty.")
+    rumble_video_data = {}  # Provide a default value or handle the error as needed
 
 # Configure Chrome options
 opt = Options()
@@ -336,4 +346,10 @@ if __name__ == "__main__":
     upload_result = perform_upload(data)
     upload_success(upload_result)
 
+if __name__ == "__main__":
+    print("rumble_uploader.py is being run directly")
+else:
+    print(f"rumble_uploader.py is being imported by another module: {__name__}")
+
 sys.exit(0)
+

@@ -16,10 +16,13 @@ RUN pip install --upgrade pip setuptools wheel && \
 
 COPY . /code/
 
+RUN ls -la /code/ && ls -la /
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-# D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\entrypoint.sh
+RUN ls -la /code/ && ls -la /
+
 #  working
 # FROM python:3
 # ENV PYTHONDONTWRITEBYTECODE=1

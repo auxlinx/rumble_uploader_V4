@@ -183,7 +183,7 @@ def upload_to_rumble(serialized_data):
             retry_limit = 3  # Number of retries
             retry_count = 0
             print(f"Attempt {retry_count + 1} failed with error: {str(e)}")
-            
+
             retry_count += 1
             if retry_count >= retry_limit:
                 print("Maximum retry attempts reached. Unable to upload file.")
@@ -240,7 +240,7 @@ def upload_to_rumble(serialized_data):
             upload_button.click()
             # Scroll the button into view
             driver.execute_script("arguments[0].scrollIntoView(true);", upload_button)
-            
+
             # Try clicking the button
             try:
                 upload_button.click()
@@ -296,7 +296,7 @@ def upload_to_rumble(serialized_data):
             print(f"An error occurred: {e}")
             break
 
-        try: 
+        try:
             copy_rumble_embed_code = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, rumble_embed_code)))
             rumble_embed_code_copied_text = copy_rumble_embed_code.text
 
@@ -304,7 +304,7 @@ def upload_to_rumble(serialized_data):
             print(f"An error occurred: {e}")
             break
 
-        try: 
+        try:
             copy_rumble_monetized_embed_code = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, rumble_monetized_embed_code)))
             rumble_monetized_embed_copied_text = copy_rumble_monetized_embed_code.text
 
@@ -312,7 +312,7 @@ def upload_to_rumble(serialized_data):
             print(f"An error occurred: {e}")
             break
 
-        driver.quit()   
+        driver.quit()
 
     rumble_video_links_return_data = {
         "rumble_video_direct_link": rumble_direct_link_copied_text,
@@ -361,4 +361,3 @@ def upload_to_rumble(serialized_data):
         print(f"rumble_uploader.py is being imported by another module: {__name__}")
 
     sys.exit(0)
-

@@ -7,6 +7,8 @@ import logging
 from pathlib import Path
 from urllib.parse import unquote
 from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,7 +26,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 load_dotenv()
 
-SELENIUM_WEBDRIVER_PATH = unquote(ChromeDriverManager().install())
+
 
 # Rumble element selectors
 rumble_sign_in_button = 'body > header > div > div > button.header-user.round-button.btn-grey'
@@ -53,40 +55,39 @@ rumble_username = "randomrumblevideos@protonmail.com"
 rumble_password = "XKpE@h!5%j#hTW"
 
 
-def upload_to_rumble(serialized_data):
-    # The executable part of the script is wrapped in an if __name__ == "__main__": block
-    if __name__ == "__main__":
-
-
-        #  unpacks json data
-        # Check if the script received the correct number of arguments
-        if len(sys.argv) != 2:
-            print("Usage: python rumble_uploader.py '<json_data>'")
-            sys.exit(1)
-
-    # The second argument is the serialized JSON string
-    serialized_data = sys.argv[1]
+def upload_to_rumble(rumble_video_script_serialized_data):
 
     # # Deserialize the JSON string back into a Python dictionary
-    # rumble_video_data = json.loads(serialized_data)
+    rumble_video_data = json.loads(rumble_video_script_serialized_data)
 
-    # Assuming serialized_data is the variable you're trying to parse
-    if serialized_data:
+    # Assuming rumble_video_script_serialized_data is the variable you're trying to parse
+    if rumble_video_script_serialized_data:
         try:
-            rumble_video_data = json.loads(serialized_data)
+            rumble_video_data = json.loads(rumble_video_script_serialized_data)
         except json.JSONDecodeError as e:
-            logging.error(f"Failed to decode JSON from serialized_data: {e}")
+            logging.error(f"Failed to decode JSON from rumble_video_script_serialized_data: {e}")
             rumble_video_data = {}  # Provide a default value or handle the error as needed
+            print(rumble_video_data)
     else:
-        logging.error("serialized_data is empty.")
+        logging.error("rumble_video_script_serialized_data is empty.")
         rumble_video_data = {}  # Provide a default value or handle the error as needed
 
+    # Setup Chrome options
+    options = webdriver.ChromeOptions()
+
     # Configure Chrome options
-    opt = Options()
-    opt.add_experimental_option("debuggerAddress", "localhost:8989")
+    # options.add_experimental_option("debuggerAddress", "localhost:8989")
+    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI).
+    options.add_argument("--no-sandbox")  # Bypass OS security model, WARNING: NOT RECOMMENDED FOR PRODUCTION!
+    options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems.
+    options.add_argument("--remote-debugging-port=8989")  # If you need to connect to the browser for debugging.
+    options.add_argument("--verbose")
+    options.add_argument("--log-path=chromedriver.log")
+
+    # Ensure ChromeDriver is up-to-date and specify options
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     # Initialize the driver
-    driver = Driver()
     driver.get("https://rumble.com/")
 
     # Sign in to Rumble account
@@ -122,12 +123,13 @@ def upload_to_rumble(serialized_data):
     upload_video_button = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, rumble_upload_video_button)))
     upload_video_button.click()
 
-    # video_title = 'Deadpool & Wolverine | Old Bubs'
-    # video_description = 'Don’t think we can add another “and” to the title. #DeadpoolAndWolverine'
-    # video_tags = 'test34'
-    # video_category = 'Finance'
-    # video_secondary_category = 'History'
-    # rumble_video_file = r"C:\Users\auxil\Documents\rumble_script V3\static\media\videos\Deadpool&Wolverine-OldBubs.mp4"
+    # video_title = "[SFM] Heavy Bolter."
+    # video_description = "Hold your position. Kill any heretics you see."
+    # video_tags = "test"
+    # video_category = "Auto"
+    # video_secondary_category = "Fiance"
+    # rumble_video_file = "videos/[SFM]HeavyBolter..mp4"
+    # # rumble_video_file_path = str(Path(rumble_video_file))
 
     video_title = rumble_video_data["videoTitle"]
     video_description = rumble_video_data["videoDescription"]
@@ -135,12 +137,12 @@ def upload_to_rumble(serialized_data):
     video_category = rumble_video_data["videoCategory"]
     video_secondary_category = rumble_video_data["videoSecondCategory"]
     rumble_video_file = rumble_video_data["rumble_video_file"]
-    print(rumble_video_file)
     rumble_video_file_path = str(Path(rumble_video_file))
-    print(rumble_video_file_path)
 
-    file_path = r"C:\Users\auxil\Documents\rumble_script V3\static\media"
-
+    file_path = r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media"
+    # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos\[SFM]HeavyBolter..mp4
+    # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos\[SFM]HeavyBolter..mp4
+    # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos\[SFM]HeavyBolter..mp4
 
     def find_file(rumble_video_file, file_path):
         # Construct the absolute path
@@ -148,19 +150,10 @@ def upload_to_rumble(serialized_data):
         "videos//", ""
         )
         absolute_path = os.path.join(file_path, rumble_video_relative_path).replace("/", "\\")
-        print(absolute_path)
-        # Check if the file exists
-        # if os.path.exists(absolute_path):
-        # return absolute_path
-        return r"{}".format(absolute_path.replace("\\", "\\\\"))
-
-        # else:
-        #     return f"File {rumble_video_relative_path} not found in {file_path}"
-
+        return absolute_path
 
     rumble_video_file_upload = find_file(rumble_video_file, file_path)
     print(rumble_video_file_upload)
-
 
     while True:
         print("New upload started!")
@@ -168,13 +161,13 @@ def upload_to_rumble(serialized_data):
 
         time.sleep(1)
 
-        # file_path =r"C:\Users\auxil\Documents\rumble_script V3\static\media\videos\"
-                    # C:\Users\auxil\Documents\rumble_script V3\static\media\videos\
-
         try:
-            file_input = WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CSS_SELECTOR, rumble_upload_file)))
-            file_input.send_keys(rumble_video_file)
-            print(rumble_video_file)
+            file_input = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, rumble_upload_file)))
+            # Make the file input visible using JavaScript if necessary
+            driver.execute_script("arguments[0].style.display = 'block';", file_input)
+            file_input.send_keys(rumble_video_file_upload)
+            # print(file_input.send_keys(rumble_video_file_upload))
+            # print(rumble_video_file_upload)
             time.sleep(random.uniform(5, 8))
             # break  # Exit loop if upload is successful
 
@@ -290,8 +283,7 @@ def upload_to_rumble(serialized_data):
         try:
             copy_rumble_direct_link = WebDriverWait(driver, 5).until(EC.element_to_be_clickable((By.CSS_SELECTOR, rumble_direct_link)))
             rumble_direct_link_copied_text = copy_rumble_direct_link.text
-            # copy_rumble_direct_link = '#direct' = driver.find_element_by_css_selector('rumble_direct_link')
-            # rumble_direct_link = copy_rumble_direct_link.text
+
         except Exception as e:
             print(f"An error occurred: {e}")
             break
@@ -314,14 +306,13 @@ def upload_to_rumble(serialized_data):
 
         driver.quit()
 
-    rumble_video_links_return_data = {
-        "rumble_video_direct_link": rumble_direct_link_copied_text,
-        "rumble_video_embed_code_link": rumble_embed_code_copied_text,
-        "rumble_video_rumble_monetized_embed_link": rumble_monetized_embed_copied_text
-    }
-    json_data = json.dumps(rumble_video_links_return_data)
 
-    print(rumble_video_links_return_data)
+        rumble_video_links_return_data = {
+            "rumble_video_direct_link": rumble_direct_link_copied_text,
+            "rumble_video_embed_code_link": rumble_embed_code_copied_text,
+            "rumble_video_rumble_monetized_embed_link": rumble_monetized_embed_copied_text
+        }
+        rumble_video_links_json_data = json.dumps(rumble_video_links_return_data)
 
 
     def upload_success(is_success):
@@ -341,12 +332,12 @@ def upload_to_rumble(serialized_data):
 
     if __name__ == "__main__":
         if len(sys.argv) != 2:
-            print("Usage: python rumble_uploader.py '<json_data>'")
+            print("Usage: python rumble_uploader.py '< rumble_video_links_json_data>'")
             sys.exit(1)
 
-        json_data = sys.argv[1]
+        rumble_video_links_json_data = sys.argv[1]
         try:
-            data = json.loads(json_data)
+            data = json.loads( rumble_video_links_json_data)
         except json.JSONDecodeError:
             print("Invalid JSON data.")
             sys.exit(1)

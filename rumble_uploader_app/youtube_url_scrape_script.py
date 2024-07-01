@@ -8,7 +8,7 @@ from datetime import datetime
 import os
 import re
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse  # Import JsonResponse
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -31,6 +31,8 @@ def open_youtube(request):
         options.add_argument("--no-sandbox")  # Bypass OS security model, WARNING: NOT RECOMMENDED FOR PRODUCTION!
         options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems.
         options.add_argument("--remote-debugging-port=9222")  # If you need to connect to the browser for debugging.
+        options.add_argument("--verbose")
+        options.add_argument("--log-path=chromedriver.log")
 
         # Ensure ChromeDriver is up-to-date and specify options
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)

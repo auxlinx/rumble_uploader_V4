@@ -137,7 +137,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     video_category = rumble_video_data["videoCategory"]
     video_secondary_category = rumble_video_data["videoSecondCategory"]
     rumble_video_file = rumble_video_data["rumble_video_file"]
-    rumble_video_file_path = str(Path(rumble_video_file))
+    # rumble_video_file_path = str(Path(rumble_video_file))
 
     file_path = r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media"
     # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos\[SFM]HeavyBolter..mp4
@@ -164,8 +164,10 @@ def upload_to_rumble(rumble_video_script_serialized_data):
         try:
             file_input = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, rumble_upload_file)))
             # Make the file input visible using JavaScript if necessary
-            driver.execute_script("arguments[0].style.display = 'block';", file_input)
-            file_input.send_keys(rumble_video_file_upload)
+            # driver.execute_script("arguments[0].style.display = 'block';", file_input)
+            rumble_video_file_path = rumble_video_file_upload
+            print(rumble_video_file_path)
+            file_input.send_keys(rumble_video_file_path)
             # print(file_input.send_keys(rumble_video_file_upload))
             # print(rumble_video_file_upload)
             time.sleep(random.uniform(5, 8))
@@ -307,13 +309,25 @@ def upload_to_rumble(rumble_video_script_serialized_data):
         driver.quit()
 
 
+
+
+
+        #         rumble_video_links_return_data = {
+        #             "rumble_video_direct_link": rumble_direct_link_copied_text,
+        #             "rumble_video_embed_code_link": rumble_embed_code_copied_text,
+        #             "rumble_video_rumble_monetized_embed_link": rumble_monetized_embed_copied_text
+        #         }
+        # rumble_video_links_json_data = json.dumps(rumble_video_links_return_data)
+
+    def generate_rumble_video_links():
         rumble_video_links_return_data = {
             "rumble_video_direct_link": rumble_direct_link_copied_text,
             "rumble_video_embed_code_link": rumble_embed_code_copied_text,
             "rumble_video_rumble_monetized_embed_link": rumble_monetized_embed_copied_text
         }
         rumble_video_links_json_data = json.dumps(rumble_video_links_return_data)
-
+        return rumble_video_links_json_data
+    
 
     def upload_success(is_success):
         if is_success:

@@ -14,7 +14,8 @@ from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse
 from django.views.decorators.http import require_http_methods
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 import logging
-# from .rumble_uploader import process_and_return_link
+from rumble_uploader_app.rumble_uploader import generate_rumble_video_links
+
 logger = logging.getLogger(__name__)
 from rest_framework import status
 from rest_framework.response import Response
@@ -337,8 +338,8 @@ def run_rumble_script(request, pk):
         upload_to_rumble(rumble_video_script_serialized_data)
         # print(rumble_video_detail)
         # print(rumble_video_links_json_data)
-        video_links_data = process_and_return_link
-        print(video_links_data)
+        rumble_video_links_json_data = generate_rumble_video_links()
+        print(umble_video_links_json_data)
 
     # return JsonResponse(rumble_video_links_json_data)
 

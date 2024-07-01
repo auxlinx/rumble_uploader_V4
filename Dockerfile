@@ -19,7 +19,7 @@ COPY . /code/
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
-
+D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\entrypoint.sh
 #  working
 # FROM python:3
 # ENV PYTHONDONTWRITEBYTECODE=1

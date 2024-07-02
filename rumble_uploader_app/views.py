@@ -14,7 +14,7 @@ from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse
 from django.views.decorators.http import require_http_methods
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 import logging
-from rumble_uploader_app.rumble_uploader import generate_rumble_video_links
+# from .rumble_uploader import generate_rumble_video_links
 
 logger = logging.getLogger(__name__)
 from rest_framework import status
@@ -30,6 +30,14 @@ from rumble_uploader_app.rumble_uploader import upload_to_rumble
 
 # Load the .env file
 load_dotenv()
+
+# def add_video_links_to_model():
+#     video_links = generate_rumble_video_links()
+#     # Assuming you have a model called VideoLinkModel and it has a field called 'url'
+#     for link in video_links:
+#         # Create a new instance of the model for each link and save it to the database
+#         new_video_link = VideoLinkModel(url=link)
+#         new_video_link.save()
 
 #  Admin
 @api_view(['POST'])
@@ -304,29 +312,22 @@ def youtube_video_update(request, pk):
 # script run views
 
 def run_rumble_script(request, pk):
-
+    """
+    Function docstring describing the purpose of the function.
+    """
     rumble_video = get_object_or_404(RumbleVideo, pk=pk)
     if request.method == 'POST':
-        rumble_video_data = RumbleVideo.objects.get(pk=pk)
         rumble_video_absolute_path = rumble_video.rumble_video_file.name
-        # base_dir = Path(r"C:\Users\auxil\Documents\rumble_script V3\static\media")
-        # relative_path = rumble_video.rumble_video_file.name.lstrip("/")
-        # absolute_path = base_dir / relative_path.replace("/", "\\")
-        # rumble_video_absolute_path = str(absolute_path)
-        # print(rumble_video_absolute_path)
-        # "C:\Users\auxil\Documents\rumble_script V3\static\media\videos\Deadpool&Wolverine-OldBubs.mp4"
-
         rumble_video_script_data = ({
             "pk": rumble_video.pk,
             "videoTitle": rumble_video.rumble_video_title,
             "videoDescription": rumble_video.rumble_video_description,
             "videoTags": rumble_video.rumble_rumble_tags,
             "videoCategory": rumble_video.rumble_primary_category,
+            "rumble_video_visibility": rumble_video.rumble_visibility,
             "videoSecondCategory": rumble_video.rumble_secondary_category,
             "rumble_video_file": rumble_video_absolute_path,
         })
-        # print(rumble_video_script_data)
-        # Serialize to JSON
         try:
             # Attempt to parse the JSON string
             rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
@@ -334,14 +335,9 @@ def run_rumble_script(request, pk):
         except json.JSONDecodeError as e:
             # If an error occurs, the string is not properly formatted as JSON
             print(f"The string is not properly formatted as JSON: {e}")
-        # print(rumble_video_script_serialized_data)
         upload_to_rumble(rumble_video_script_serialized_data)
-        # print(rumble_video_detail)
-        # print(rumble_video_links_json_data)
-        rumble_video_links_json_data = generate_rumble_video_links()
-        print(umble_video_links_json_data)
-
-    # return JsonResponse(rumble_video_links_json_data)
+        
+    return HttpResponse("Script executed successfully.")
 
 
 

@@ -60,17 +60,39 @@ rumble_username = "randomrumblevideos@protonmail.com"
 rumble_password = "XKpE@h!5%j#hTW"
 
 
+#  use this code to test script in browser
+
+rumble_video_script_data = {
+    "videoTitle": "[SFM] Heavy Bolter.",
+    "videoDescription": "Hold your position. Kill any heretics you see.In addition to the VR content posted here, we will also be posting animated content by made in Source Filmmak...",
+    "videoTags": "fkdf, fkdf1",
+    "videoCategory": "Auto",
+    "videoSecondCategory": "Entertainment",
+    "rumble_video_visibility": "Private",
+    "rumble_video_file": "videos/[SFM]HeavyBolter..mp4",
+}
+
+rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
+
 def upload_to_rumble(rumble_video_script_serialized_data):
-    """
-    Uploads the rumble video to Rumble.
-    """
+
+    pass
+
+# The if __name__ block
+if __name__ == "__main__":
+    upload_to_rumble(rumble_video_script_serialized_data)
+
+    # # Deserialize the JSON string back into a Python dictionary
+    rumble_video_data = json.loads(rumble_video_script_serialized_data)
+
     # Assuming rumble_video_script_serialized_data is the variable you're trying to parse
     if rumble_video_script_serialized_data:
         try:
             rumble_video_data = json.loads(rumble_video_script_serialized_data)
         except json.JSONDecodeError as e:
-            logging.error("Failed to decode JSON from rumble_video_script_serialized_data: %s", e)
+            logging.error(f"Failed to decode JSON from rumble_video_script_serialized_data: {e}")
             rumble_video_data = {}  # Provide a default value or handle the error as needed
+            print(rumble_video_data)
     else:
         logging.error("rumble_video_script_serialized_data is empty.")
         rumble_video_data = {}  # Provide a default value or handle the error as needed
@@ -80,7 +102,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
 
     # Configure Chrome options
     # options.add_experimental_option("debuggerAddress", "localhost:8989")
-    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI).
+    # options.add_argument("--headless")  # Run Chrome in headless mode (no GUI).
     options.add_argument("--no-sandbox")  # Bypass OS security model, WARNING: NOT RECOMMENDED FOR PRODUCTION!
     options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems.
     options.add_argument("--remote-debugging-port=8989")  # If you need to connect to the browser for debugging.

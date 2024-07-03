@@ -5,20 +5,22 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
 
-# Copy requirements first to leverage Docker cache
 
+# Ensure requirements.txt is in the Docker context and copy it
 COPY requirements.txt /code/
 
 # Upgrade pip and install requirements from requirements.txt in one RUN to reduce layers
-RUN pip install --upgrade pip && \
+RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
 
 COPY . /code/
 
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
+
 
 #  working
 # FROM python:3

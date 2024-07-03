@@ -11,7 +11,7 @@ env/*  # Ignoring all files within the env directory
 .env.scripts  # Ignoring environment scripts
 /env/
 .env.Lib  # Ignoring environment scripts
-
+.env
 
 
 # Log files

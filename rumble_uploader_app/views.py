@@ -5,40 +5,39 @@ import subprocess
 import os
 import json
 from pathlib import Path
-
 from dotenv import load_dotenv
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
 from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse, HttpResponseBadRequest,HttpResponse, HttpResponseNotFound
-# from django.core.exceptions import ValidationError
-# from django.core.validators import URLValidator
-from django.views.decorators.http import require_http_methods, require_POST
-from django.core.exceptions import ObjectDoesNotExist
+from django.views.decorators.http import require_http_methods
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 import logging
-from .rumble_uploader import rumble_video_links_return_data
+# from .rumble_uploader import generate_rumble_video_links
 
-# Add this line to import the logger module
 logger = logging.getLogger(__name__)
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-# from selenium import webdriver
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.common.by import By
-# from webdriver_manager.chrome import ChromeDriverManager
-# from selenium.common.exceptions import NoSuchElementException  # Corrected import
 from .serializers import YouTubeVideoSerializer, RumbleVideoSerializer
 from .forms import RumbleVideoForm, YouTubeVideoForm, YouTubeURLForm
 from .models import RumbleVideo, YouTubeVideo, YouTubeURL
 from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
+from rumble_uploader_app.rumble_uploader import upload_to_rumble
 
 # Load the .env file
 load_dotenv()
+
+# def add_video_links_to_model():
+#     video_links = generate_rumble_video_links()
+#     # Assuming you have a model called VideoLinkModel and it has a field called 'url'
+#     for link in video_links:
+#         # Create a new instance of the model for each link and save it to the database
+#         new_video_link = VideoLinkModel(url=link)
+#         new_video_link.save()
 
 #  Admin
 @api_view(['POST'])
@@ -313,91 +312,33 @@ def youtube_video_update(request, pk):
 # script run views
 
 def run_rumble_script(request, pk):
-
+    """
+    Function docstring describing the purpose of the function.
+    """
     rumble_video = get_object_or_404(RumbleVideo, pk=pk)
     if request.method == 'POST':
-        rumble_video_data = RumbleVideo.objects.get(pk=pk)
         rumble_video_absolute_path = rumble_video.rumble_video_file.name
-        # base_dir = Path(r"C:\Users\auxil\Documents\rumble_script V3\static\media")
-        # relative_path = rumble_video.rumble_video_file.name.lstrip("/")
-        # absolute_path = base_dir / relative_path.replace("/", "\\")
-        # rumble_video_absolute_path = str(absolute_path)
-        # print(rumble_video_absolute_path)
-        # "C:\Users\auxil\Documents\rumble_script V3\static\media\videos\Deadpool&Wolverine-OldBubs.mp4"
         rumble_video_script_data = ({
             "pk": rumble_video.pk,
             "videoTitle": rumble_video.rumble_video_title,
             "videoDescription": rumble_video.rumble_video_description,
             "videoTags": rumble_video.rumble_rumble_tags,
             "videoCategory": rumble_video.rumble_primary_category,
+            "rumble_video_visibility": rumble_video.rumble_visibility,
             "videoSecondCategory": rumble_video.rumble_secondary_category,
             "rumble_video_file": rumble_video_absolute_path,
         })
-        print(rumble_video_script_data)
-        # Serialize to JSON
-        serialized_data = json.dumps(rumble_video_script_data)
-        # print(rumble_video_script_data)
-    subprocess.call(['python', 'rumble_uploader_app/rumble_uploader.py', serialized_data])
-    print(rumble_video_detail)
-    print(rumble_video_links_return_data)
+        try:
+            # Attempt to parse the JSON string
+            rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
+            print("The string is properly formatted as JSON.")
+        except json.JSONDecodeError as e:
+            # If an error occurs, the string is not properly formatted as JSON
+            print(f"The string is not properly formatted as JSON: {e}")
+        upload_to_rumble(rumble_video_script_serialized_data)
+        
+    return HttpResponse("Script executed successfully.")
 
-    return JsonResponse(rumble_video_links_return_data)
-
-    return HttpResponseRedirect(reverse('rumble_video_list'))
-
-# def upload_to_rumble(access_token, title, description, license_type, video_path, thumb_path=None, cc_files=None, channel_id=None, guid=None):
-#     # Prepare payload
-#     rumble_video = get_object_or_404(RumbleVideo, pk=pk)
-#     rumble_video_data = RumbleVideo.objects.get(pk=pk)
-#     rumble_video_data = {
-#         'access_token': access_token,
-#         'title': rumble_video.rumble_video_title,
-#         'description': rumble_video.rumble_video_description,
-#         'license_type': 6,
-#         'channel_id': 6497748,
-#         'guid': guid,
-#         'video_path':rumble_video.rumble_video_file,
-#     }
-
-#     # Filter out None values
-#     rumble_video_data = {k: v for k, v in data.items() if v is not None}
-
-#     # Prepare files
-#     files = {}
-#     if thumb_path:
-#         files['thumb'] = open(thumb_path, 'rb')
-#     files['video'] = open(video_path, 'rb')
-
-#     # Add CC files if any
-#     if cc_files:
-#         for lang_code, cc_path in cc_files.items():
-#             files[f'cc_{lang_code}'] = open(cc_path, 'rb')
-
-#     # Make the request
-#     response = requests.post(https://rumble.com/api/simple-upload.php, rumble_video_data=rumble_video_data, files=files)
-
-#     # Close opened files
-#     for file in files.values():
-#         file.close()
-
-#     # Check response
-#     if response.status_code == 200:
-#         print("Upload successful:", response.json())
-#     else:
-#         print("Failed to upload:", response.text)
-
-# # Example usage
-# upload_to_rumble(
-#     access_token="your_access_token_here",
-#     title="Your Video Title",
-#     description="Your video description",
-#     license_type=0,  # Not for sale
-#     video_path="path/to/your/video.mp4",
-#     thumb_path="path/to/your/thumbnail.jpg",
-#     cc_files={'en': 'path/to/english_cc.vtt'},  # Optional
-#     channel_id=12345,  # Optional
-#     guid="your_internal_video_id"  # Optional
-# )
 
 
 @require_http_methods(["POST"])

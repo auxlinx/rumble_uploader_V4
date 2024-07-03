@@ -1,13 +1,14 @@
-Django>=3.0,<4.0
-django-environ>=0.8,<1.0
-# psycopg2>=2.8
-gunicorn==20.1.0
-psycopg2-binary==2.9.3
-dj-database-url==0.5.0
-Pillow==8.3.2
-selenium==4.22.0
-djangorestframework>=3.12,<3.13
-seleniumbase==4.28.0
-requests==2.31.0
-webdriver_manager==4.0.1
-flake8>=3.9
+Django>=3.0,<4.0  # Already specifies a range, ensuring compatibility while allowing updates within Django 3.x
+django-environ>=0.8,<1.0  # Same as above
+# psycopg2>=2.8  # Commented out, but specifying a minimum version is a good practice
+gunicorn>=20.1.0,<21.0  # Allows updates within the 20.x versions
+psycopg2-binary>=2.9,<3.0  # Specify a minimum version and allow updates before the next major version
+dj-database-url>=0.5.0,<1.0  # Allows updates within the 0.x versions
+Pillow>=9.0.0,<10.0  # Specify a minimum version based on the latest known compatible version and allow updates before the next major version
+selenium>=4.22.0,<5.0  # Allows updates within the 4.x versions
+djangorestframework>=3.12,<4.0  # Allows updates within the 3.x versions
+seleniumbase>=4.28.0,<5.0  # Allows updates within the 4.x versions
+requests>=2.31.0,<3.0  # Allows updates within the 2.x versions
+webdriver_manager>=4.0.1,<5.0  # Allows updates within the 4.x versions
+flake8>=3.9,<4.0  # Allows updates within the 3.x versions
+pytube>=12.0.0  # Specify a minimum version based on the latest known compatible version

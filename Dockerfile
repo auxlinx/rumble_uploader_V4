@@ -10,7 +10,7 @@ WORKDIR /code
 COPY requirements.txt /code/
 
 # Upgrade pip and install requirements from requirements.txt in one RUN to reduce layers
-RUN pip install --upgrade pip setuptools wheel && \
+RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 

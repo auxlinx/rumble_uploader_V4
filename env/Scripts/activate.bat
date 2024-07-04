@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\auxil\Documents\rumble_script V4\env
+set VIRTUAL_ENV=D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\env
 
 if not defined PROMPT set PROMPT=$P$G
 

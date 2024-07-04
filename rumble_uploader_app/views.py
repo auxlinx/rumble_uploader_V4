@@ -14,11 +14,7 @@ from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse
 from django.views.decorators.http import require_http_methods
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 import logging
-<<<<<<< HEAD
 # from .rumble_uploader import generate_rumble_video_links
-=======
-# from .rumble_uploader import rumble_video_links_return_data
->>>>>>> b4ee4dee05a6f92f3f204e830283e25e2d44800f
 
 logger = logging.getLogger(__name__)
 from rest_framework import status
@@ -31,12 +27,6 @@ from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
 from rumble_uploader_app.rumble_uploader import upload_to_rumble
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> b4ee4dee05a6f92f3f204e830283e25e2d44800f
 
 # Load the .env file
 load_dotenv()
@@ -338,7 +328,6 @@ def run_rumble_script(request, pk):
             "videoSecondCategory": rumble_video.rumble_secondary_category,
             "rumble_video_file": rumble_video_absolute_path,
         })
-<<<<<<< HEAD
         try:
             # Attempt to parse the JSON string
             rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
@@ -349,15 +338,6 @@ def run_rumble_script(request, pk):
         upload_to_rumble(rumble_video_script_serialized_data)
         
     return HttpResponse("Script executed successfully.")
-=======
-        print(rumble_video_script_data)
-        # Serialize to JSON
-        serialized_data = json.dumps(rumble_video_script_data)
-        # print(rumble_video_script_data)
-        upload_to_rumble(serialized_data)
-        print(rumble_video_detail)
-        print(rumble_video_links_return_data)
->>>>>>> b4ee4dee05a6f92f3f204e830283e25e2d44800f
 
 
 

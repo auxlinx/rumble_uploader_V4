@@ -33,7 +33,7 @@ services:
   web:
     build: .
     restart: no
-    entrypoint: /bin/sh -c
+    # entrypoint: /bin/sh -c
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code

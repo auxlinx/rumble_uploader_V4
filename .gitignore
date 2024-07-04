@@ -3,15 +3,7 @@ node_modules/
 bower_components/
 
 # Environment configuration files
-# .env
-# .env.local
-# .env.*.local
-# .env*  # Added to ignore all .env files
-# env/*  # Ignoring all files within the env directory
-# .env.scripts  # Ignoring environment scripts
-# /env/
-# .env.Lib  # Ignoring environment scripts
-# .env
+env/
 
 
 # Log files

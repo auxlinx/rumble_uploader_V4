@@ -3,6 +3,7 @@ Module docstring describing the purpose of the module.
 """
 import subprocess
 import os
+import sys
 import json
 from pathlib import Path
 from dotenv import load_dotenv
@@ -26,7 +27,7 @@ from .models import RumbleVideo, YouTubeVideo, YouTubeURL
 from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
-from rumble_uploader_app.rumble_uploader import upload_to_rumble
+from rumble_uploader_app.rumble_uploader_browser import upload_to_rumble
 
 # Load the .env file
 load_dotenv()
@@ -336,8 +337,81 @@ def run_rumble_script(request, pk):
             # If an error occurs, the string is not properly formatted as JSON
             print(f"The string is not properly formatted as JSON: {e}")
         upload_to_rumble(rumble_video_script_serialized_data)
-        
+
     return HttpResponse("Script executed successfully.")
+
+# def run_rumble_script(request, pk):
+#     """
+#     Function docstring describing the purpose of the function.
+#     """
+
+#     rumble_video = get_object_or_404(RumbleVideo, pk=pk)
+#     if request.method == 'POST':
+#         rumble_video_absolute_path = rumble_video.rumble_video_file.name
+#         rumble_video_script_data = {
+#             "pk": rumble_video.pk,
+#             "videoTitle": rumble_video.rumble_video_title,
+#             "videoDescription": rumble_video.rumble_video_description,
+#             "videoTags": rumble_video.rumble_rumble_tags,
+#             "videoCategory": rumble_video.rumble_primary_category,
+#             "rumble_video_visibility": rumble_video.rumble_visibility,
+#             "videoSecondCategory": rumble_video.rumble_secondary_category,
+#             "rumble_video_file": rumble_video_absolute_path,
+#         }
+
+#         rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
+#         script_directory = "/Proton Drive Backup/rahw_coding_mobile/aux_coding/rumble_uploader/rumble_uploader_V4/rumble_uploader_app"
+#         script_name = "rumble_uploader_browser.py"
+#         script_path = os.path.join(script_directory, script_name)
+
+#         if not os.path.exists(script_path):
+#             print(f"Script file not found at {script_path}")
+#         else:
+#             try:
+#                 subprocess.run([sys.executable, script_path, '--upload', rumble_video_script_serialized_data], check=True)
+#             except subprocess.CalledProcessError as e:
+#                 print(f"An error occurred while executing the script: {e}")
+
+#         return HttpResponse("Script executed successfully.")
+
+    #     try:
+    #         rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
+    #         python_executable_path = sys.executable
+    #         script_path = "D:\\Proton Drive Backup\\rahw_coding_mobile\\aux_coding\\rumble_uploader\\rumble_uploader_V4\\run_rumble_script.py"
+    #         # Use a generic approach to specify the Python executable
+    #         subprocess.run([python_executable_path, script_path, rumble_video_script_serialized_data], check=True)
+    #     except subprocess.CalledProcessError as e:
+    #         print(f"An error occurred while executing the script: {e}")
+
+    # return HttpResponse("Script executed successfully.")
+
+# def run_rumble_script(request, pk):
+#     """
+#     Function docstring describing the purpose of the function.
+#     """
+#     rumble_video = get_object_or_404(RumbleVideo, pk=pk)
+#     if request.method == 'POST':
+#         rumble_video_absolute_path = rumble_video.rumble_video_file.name
+#         rumble_video_script_data = ({
+#             "pk": rumble_video.pk,
+#             "videoTitle": rumble_video.rumble_video_title,
+#             "videoDescription": rumble_video.rumble_video_description,
+#             "videoTags": rumble_video.rumble_rumble_tags,
+#             "videoCategory": rumble_video.rumble_primary_category,
+#             "rumble_video_visibility": rumble_video.rumble_visibility,
+#             "videoSecondCategory": rumble_video.rumble_secondary_category,
+#             "rumble_video_file": rumble_video_absolute_path,
+#         })
+#         try:
+#             # Attempt to parse the JSON string
+#             rumble_video_script_serialized_data = json.dumps(rumble_video_script_data)
+#             print("The string is properly formatted as JSON.")
+#         except json.JSONDecodeError as e:
+#             # If an error occurs, the string is not properly formatted as JSON
+#             print(f"The string is not properly formatted as JSON: {e}")
+#         upload_to_rumble(rumble_video_script_serialized_data)
+
+#     return HttpResponse("Script executed successfully.")
 
 
 

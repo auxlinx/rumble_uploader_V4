@@ -38,6 +38,8 @@ services:
     volumes:
       - .:/code
       - postgres_data:/var/lib/postgresql/data/
+      - ./static:/code/static  # Map the static directory from host to container
+
     ports:
       - "8000:8000"
     depends_on:

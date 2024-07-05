@@ -16,7 +16,6 @@ COPY requirements.txt /code/
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
-
 COPY . /code/
 
 # Ensure the script has execution permissions
@@ -29,7 +28,10 @@ RUN chmod +x /entrypoint.sh
 # Create the seluser
 RUN useradd -m seluser
 
-# Switch back to the seluser to run your Selenium script
+# Set ownership to seluser for necessary directories and files
+RUN chown -R seluser:seluser /code
+
+# Switch to seluser before running your application
 USER seluser
 
 ENTRYPOINT ["/entrypoint.sh"]

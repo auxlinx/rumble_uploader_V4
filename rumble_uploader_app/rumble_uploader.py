@@ -57,8 +57,8 @@ rumble_embed_code = '#embed'
 rumble_monetized_embed_code = '#monetized'
 
 # Access the RUMBLE_USERNAME environment variable
-rumble_username = os.getenv('RUMBLE_USERNAME')
-rumble_password = os.getenv('rumble_password')
+rumble_username = os.getenv('random_rumblevideo_USERNAME')
+rumble_password = os.getenv('random_rumblevideo__password')
 
 
 def upload_to_rumble(rumble_video_script_serialized_data):

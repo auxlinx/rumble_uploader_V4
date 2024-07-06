@@ -27,7 +27,7 @@ from .models import RumbleVideo, YouTubeVideo, YouTubeURL
 from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
-from rumble_uploader_app.rumble_uploader_browser import upload_to_rumble
+from rumble_uploader_app.rumble_uploader import upload_to_rumble
 
 # Load the .env file
 load_dotenv()

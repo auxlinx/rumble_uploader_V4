@@ -3,7 +3,11 @@ node_modules/
 bower_components/
 
 # Environment configuration files
+.env
 
+# Example .gitignore content
+venv/
+env/
 
 # Log files
 *.log

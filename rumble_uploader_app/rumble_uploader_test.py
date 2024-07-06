@@ -172,7 +172,11 @@ if __name__ == "__main__":
     # Now call the function with the correct argument
     visibility_option = rumble_visibility(rumble_video_visibility_setting)
 
-    file_path = r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media"
+    # Get the directory of the current script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the relative path to the static/media directory
+    file_path = os.path.join(current_dir, 'static', 'media')
 
 
     def find_file(rumble_video_file, file_path):

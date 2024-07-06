@@ -61,9 +61,19 @@ rumble_direct_link = '#direct'
 rumble_embed_code = '#embed'
 rumble_monetized_embed_code = '#monetized'
 
+# Load the environment variables from .env file
+load_dotenv()
+
+# Access the RUMBLE_USERNAME environment variable
+rumble_username = os.getenv('RUMBLE_USERNAME')
+rumble_password = os.getenv('rumble_password')
+
+# Use rumble_username as needed
+print(rumble_username)
+
 # Rumble account credentials
-rumble_username = "randomrumblevideos@protonmail.com"
-rumble_password = "XKpE@h!5%j#hTW"
+# rumble_username = "randomrumblevideos@protonmail.com"
+# rumble_password = "XKpE@h!5%j#hTW"
 
 current_user = getpass.getuser()
 

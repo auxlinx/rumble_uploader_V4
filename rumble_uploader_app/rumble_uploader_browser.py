@@ -71,13 +71,11 @@ rumble_password = os.getenv('rumble_password')
 # Use rumble_username as needed
 print(rumble_username)
 
-# Rumble account credentials
-# rumble_username = "randomrumblevideos@protonmail.com"
-# rumble_password = "XKpE@h!5%j#hTW"
 
 current_user = getpass.getuser()
 
 print(f"The script is being run by: {current_user}")
+
 
 def is_admin():
     try:
@@ -129,12 +127,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     chrome_options.add_argument("--remote-debugging-port=8989")  # If you need to connect to the browser for debugging.
     chrome_options.add_argument("--verbose")
     chrome_options.add_argument("--log-path=chromedriver.log")
-    chrome_options.add_experimental_option("prefs", {
-    "download.default_directory": r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos",
-    "profile.default_content_settings.popups": 0,
-    "download.prompt_for_download": False,
-        })
-
+    
     # Ensure ChromeDriver is up-to-date and specify options
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
@@ -198,11 +191,13 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     # Now call the function with the correct argument
     visibility_option = rumble_visibility(rumble_video_visibility_setting)
 
-    file_path = r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media"
+    # Get the directory of the current script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos
+    # Construct the relative path to the static/media directory
+    file_path = os.path.join(current_dir, 'static', 'media', 'videos')
+
     # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos\[SFM]HeavyBolter..mp4
-    # D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media\videos
 
     def find_file(rumble_video_file, file_path):
         try:

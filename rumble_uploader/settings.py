@@ -13,9 +13,6 @@ import os
 from pathlib import Path
 # import environ
 
-# env = environ.Env()
-# # Assuming your .env file is located at the same level as settings.py
-# environ.Env.read_env(r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_script V2\.env")
 
 # RUMBLE_CHANNELS = env('RUMBLE_CHANNELS').split(',')
 
@@ -152,4 +149,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 # Construct the path to the chromedriver
 SELENIUM_WEBDRIVER_PATH = os.path.join(BASE_DIR, '..', 'drivers', 'chromedriver.exe')
 
-# SELENIUM_WEBDRIVER_PATH = r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\rumble_uploader_app\Chromedriver\chromedriver.exe'

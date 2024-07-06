@@ -67,8 +67,7 @@ driver.get("https://rumble.com/")
 rumble_username = os.getenv('RUMBLE_USERNAME')
 rumble_password = unquote(os.getenv('RUMBLE_PASSWORD'))
 
-# username = "randomrumblevideos@protonmail.com"
-# password = "XKpE@h!1%j#hTW"
+
 try:
     # Click the login button
     sign_in_button = WebDriverWait(driver, 1).until(EC.element_to_be_clickable((By.CSS_SELECTOR,

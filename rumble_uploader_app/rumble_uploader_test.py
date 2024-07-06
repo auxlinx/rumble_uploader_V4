@@ -55,9 +55,11 @@ rumble_submit_button = '#submitForm2'
 rumble_direct_link = '#direct'
 rumble_embed_code = '#embed'
 rumble_monetized_embed_code = '#monetized'
-# Rumble account credentials
-rumble_username = "randomrumblevideos@protonmail.com"
-rumble_password = "XKpE@h!5%j#hTW"
+
+
+# Access the RUMBLE_USERNAME environment variable
+rumble_username = os.getenv('RUMBLE_USERNAME')
+rumble_password = os.getenv('rumble_password')
 
 
 #  use this code to test script in browser
@@ -176,7 +178,7 @@ if __name__ == "__main__":
     current_dir = os.path.dirname(os.path.abspath(__file__))
 
     # Construct the relative path to the static/media directory
-    file_path = os.path.join(current_dir, 'static', 'media')
+    file_path = os.path.join(current_dir, 'static', 'media', 'videos')
 
 
     def find_file(rumble_video_file, file_path):

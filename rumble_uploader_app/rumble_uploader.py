@@ -55,9 +55,10 @@ rumble_submit_button = '#submitForm2'
 rumble_direct_link = '#direct'
 rumble_embed_code = '#embed'
 rumble_monetized_embed_code = '#monetized'
-# Rumble account credentials
-rumble_username = "randomrumblevideos@protonmail.com"
-rumble_password = "XKpE@h!5%j#hTW"
+
+# Access the RUMBLE_USERNAME environment variable
+rumble_username = os.getenv('RUMBLE_USERNAME')
+rumble_password = os.getenv('rumble_password')
 
 
 def upload_to_rumble(rumble_video_script_serialized_data):
@@ -150,7 +151,11 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     # Now call the function with the correct argument
     visibility_option = rumble_visibility(rumble_video_visibility_setting)
 
-    file_path = r"D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\static\media"
+    # Get the directory of the current script
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Construct the relative path to the static/media directory
+    file_path = os.path.join(current_dir, 'static', 'media', 'videos')
 
 
     def find_file(rumble_video_file, file_path):

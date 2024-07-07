@@ -15,9 +15,6 @@ from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse
 from django.views.decorators.http import require_http_methods
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 import logging
-# from .rumble_uploader import generate_rumble_video_links
-
-logger = logging.getLogger(__name__)
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -28,6 +25,11 @@ from .youtube_url_download_script import download_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
 from rumble_uploader_app.rumble_uploader import upload_to_rumble
+
+
+# from .rumble_uploader import generate_rumble_video_links
+
+logger = logging.getLogger(__name__)
 
 # Load the .env file
 load_dotenv()

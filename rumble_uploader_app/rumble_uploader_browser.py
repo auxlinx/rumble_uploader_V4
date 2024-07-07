@@ -127,7 +127,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     chrome_options.add_argument("--remote-debugging-port=8989")  # If you need to connect to the browser for debugging.
     chrome_options.add_argument("--verbose")
     chrome_options.add_argument("--log-path=chromedriver.log")
-    
+
     # Ensure ChromeDriver is up-to-date and specify options
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 

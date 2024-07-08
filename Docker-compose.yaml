@@ -35,6 +35,8 @@ services:
     restart: no
     # entrypoint: /bin/sh -c "while true; do sleep 1000; done"
     command: python manage.py runserver 0.0.0.0:8000
+    env_file:
+      - .env
     volumes:
       - .:/code
       - postgres_data:/var/lib/postgresql/data/

@@ -5,7 +5,8 @@ import subprocess
 import os
 import sys
 import json
-from pathlib import Path
+import logging
+from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
@@ -326,6 +327,9 @@ def run_rumble_script(request, pk):
         rumble_video_absolute_path = rumble_video.rumble_video_file.name
         rumble_video_script_data = ({
             "pk": rumble_video.pk,
+            "rumble_account": rumble_video.rumble_account,
+            "rumble_user_name": "randomrumblevideos@protonmail.com",
+            "rumble_password": "XKpE@h!5%j#hTW",
             "videoTitle": rumble_video.rumble_video_title,
             "videoDescription": rumble_video.rumble_video_description,
             "videoTags": rumble_video.rumble_rumble_tags,

@@ -5,7 +5,6 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /code
 
-
 # Ensure requirements.txt is in the Docker context and copy it
 COPY requirements.txt /code/
 
@@ -13,11 +12,18 @@ COPY requirements.txt /code/
 RUN pip install --upgrade pip setuptools wheel && \
     pip install -r requirements.txt
 
-COPY . /code/
-
-
+COPY --from=sudobmitch/base:scratch /usr/bin/gosu /usr/bin/fix-perms /usr/bin/
+# Copy entrypoint.sh before changing its permissions
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+
+USER root
+COPY . /code/
+
+# Assuming chromedriver is in the Docker context, copy and set permissions
+COPY rumble_uploader_app/Chromedriver/chromedriver.exe /code/chromedriver
+RUN chmod -R 777 /code/chromedriver
+
 ENTRYPOINT ["/entrypoint.sh"]
 
 #  working

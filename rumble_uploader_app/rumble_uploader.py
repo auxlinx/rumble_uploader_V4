@@ -18,6 +18,9 @@ from selenium.common.exceptions import TimeoutException
 from seleniumbase import Driver
 from webdriver_manager.chrome import ChromeDriverManager
 from dotenv import load_dotenv
+from rumble_uploader_app.models import RumbleVideo
+from django.core.exceptions import ObjectDoesNotExist
+
 
 # Setup basic logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -130,7 +133,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     time.sleep(random_wait_time)
     upload_video_button = WebDriverWait(driver, short_wait_time).until(EC.element_to_be_clickable((By.CSS_SELECTOR, rumble_upload_video_button)))
     upload_video_button.click()
-
+    rumble_video_pk = rumble_video_data["rumble_video_pk"]
     video_title = rumble_video_data["videoTitle"]
     video_description = rumble_video_data["videoDescription"]
     video_tags = rumble_video_data["videoTags"]
@@ -153,17 +156,19 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     # Now call the function with the correct argument
     visibility_option = rumble_visibility(rumble_video_visibility_setting)
 
-    # def find_file(rumble_video_file, file_path):
-    #     # Construct the absolute path
-    #     rumble_video_relative_path = rumble_video_file.replace(
-    #     "videos//", ""
-    #     )
-    #     absolute_path = os.path.join("C:", file_path, rumble_video_relative_path).replace("/", "\\")
-    #     print(absolute_path)
-    #     return absolute_path
+    file_path = '/code/static/media/videos'
 
-    # rumble_video_file_upload = find_file(rumble_video_file, file_path)
-    # # print(rumble_video_file_upload)
+    def find_file(rumble_video_file, file_path):
+        # Construct the absolute path
+        rumble_video_relative_path = rumble_video_file.replace(
+        "videos/", "")
+        print(rumble_video_relative_path)
+        absolute_path = os.path.join(file_path, rumble_video_relative_path)
+        print(absolute_path)
+        return absolute_path
+
+    rumble_video_file_upload = find_file(rumble_video_file, file_path)
+    # print(rumble_video_file_upload)
 
 
     # Configure logging
@@ -171,7 +176,8 @@ def upload_to_rumble(rumble_video_script_serialized_data):
 
 
     # Assuming the file to upload is 'RecklessRegiment.mp4'
-    rumble_video_file_upload = '/code/static/media/videos/RecklessRegiment.mp4'
+    # rumble_video_file_upload = '/code/static/media/videos/RecklessRegiment.mp4'
+
     print(rumble_video_file_upload)
 # Assuming 'rumble_video_file_upload' contains the path to your file
     def check_file_permissions(rumble_video_file_upload):
@@ -246,11 +252,9 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     time.sleep(1)
 
     try:
-        # file_input = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.CSS_SELECTOR, rumble_upload_file)))
         file_input = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]')))
         file_input.send_keys(rumble_video_file_upload)
         print(rumble_video_file_upload)
-        # upload_button.click()
         time.sleep(random_wait_time)
 
     except Exception as e:
@@ -395,23 +399,32 @@ def upload_to_rumble(rumble_video_script_serialized_data):
         "rumble_video_rumble_monetized_embed_link": rumble_monetized_embed_copied_text
     }
 
+
+
+    def update_rumble_video_link(rumble_video_pk, rumble_video_links_return_data):
+        try:
+        # Retrieve the RumbleVideo object by its primary key (pk)
+            rumble_video = RumbleVideo.objects.get(pk=rumble_video_pk)
+            # Update the rumble_direct_link field
+            rumble_video.rumble_direct_link = rumble_video_links_return_data["rumble_video_direct_link"]
+            rumble_video.rumble_embed_code = rumble_video_links_return_data["rumble_video_embed_code_link"]
+            rumble_video.rumble_monetized_embed = rumble_video_links_return_data["rumble_video_rumble_monetized_embed_link"]
+            rumble_video.uploaded_to_rumble_success = True
+            # Save the updated object
+            rumble_video.save()
+            print("Rumble video link updated successfully.")
+        except ObjectDoesNotExist:
+            print("Rumble video with the specified pk does not exist.")
+
+    update_rumble_video_link(rumble_video_pk, rumble_video_links_return_data)
+
     driver.quit()
-
-
-    def generate_rumble_video_links(rumble_video_links_return_data):
-        """
-        Generate rumble video links and return them as JSON data.
-        """
-        # rumble_video_links_return_data = {
-        #     "rumble_video_direct_link": rumble_direct_link_copied_text,
-        #     "rumble_video_embed_code_link": rumble_embed_code_copied_text,
-        #     "rumble_video_rumble_monetized_embed_link": rumble_monetized_embed_copied_text
-        # }
-        rumble_video_links_json_data = json.dumps(rumble_video_links_return_data)
-        return rumble_video_links_json_data
-
-    rumble_video_links_json_data = generate_rumble_video_links(rumble_video_links_return_data)
-
-    print(rumble_video_links_json_data)
-
-    sys.exit(10)
+    print("Script executed successfully.")
+    try:
+        # Your script logic here
+        # If everything goes well
+        return "Upload successful"
+    except Exception as e:
+        # Handle any exceptions, possibly logging them
+        return f"An error occurred: {str(e)}"
+    # sys.exit(10)

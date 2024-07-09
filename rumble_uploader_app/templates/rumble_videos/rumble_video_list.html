@@ -16,6 +16,10 @@
                     <th>Upload Date</th>
                     <th>Visibility</th>
                     <th>Video File</th>
+                    <th>Rumble Direct Link</th>
+                    <th>Rumble Embed Code</th>
+                    <th>Rumble Monetized Embed</th>
+                    <th>Rumble Upload Successful</th>
                     <th>Delete</th>
                     <th>Update</th>
                 </tr>
@@ -32,6 +36,10 @@
                         <td style="word-wrap: break-word;">{{ rumble_video.rumble_upload_date }}</td>
                         <td style="word-wrap: break-word;">{{ rumble_video.rumble_visibility }}</td>
                         <td style="word-wrap: break-word;">{{ rumble_video.rumble_video_file }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_direct_link }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_embed_code }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.rumble_monetized_embed }}</td>
+                        <td style="word-wrap: break-word;">{{ rumble_video.uploaded_to_rumble_success }}</td>
                         <td style="word-wrap: break-word;">
                             <form method="POST" action="{% url 'rumble_video_delete' rumble_video.pk %}">
                                 {% csrf_token %}

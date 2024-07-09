@@ -35,14 +35,6 @@ logger = logging.getLogger(__name__)
 # Load the .env file
 load_dotenv()
 
-# def add_video_links_to_model():
-#     video_links = generate_rumble_video_links()
-#     # Assuming you have a model called VideoLinkModel and it has a field called 'url'
-#     for link in video_links:
-#         # Create a new instance of the model for each link and save it to the database
-#         new_video_link = VideoLinkModel(url=link)
-#         new_video_link.save()
-
 #  Admin
 @api_view(['POST'])
 def file_upload_view(request):
@@ -249,7 +241,6 @@ def youtube_url_delete(request, pk):
     messages.success(request, 'URL deleted successfully')
     return redirect(reverse('url/youtube_url_list'))
 
-
 def youtube_url_update(request, pk):
     youtube_url = get_object_or_404(YouTubeURL, pk=pk)
     if request.method == 'POST':
@@ -262,7 +253,6 @@ def youtube_url_update(request, pk):
     return render(request, 'url/youtube_url_update.html', {'form': form})
 
 # youtube video views
-
 
 def youtube_upload_video(request):
     """
@@ -326,7 +316,7 @@ def run_rumble_script(request, pk):
     if request.method == 'POST':
         rumble_video_absolute_path = rumble_video.rumble_video_file.name
         rumble_video_script_data = ({
-            "pk": rumble_video.pk,
+            "rumble_video_pk": rumble_video.pk,
             "rumble_account": rumble_video.rumble_account,
             "rumble_user_name": "randomrumblevideos@protonmail.com",
             "rumble_password": "XKpE@h!5%j#hTW",
@@ -345,9 +335,19 @@ def run_rumble_script(request, pk):
         except json.JSONDecodeError as e:
             # If an error occurs, the string is not properly formatted as JSON
             print(f"The string is not properly formatted as JSON: {e}")
-        upload_to_rumble(rumble_video_script_serialized_data)
+        success = upload_to_rumble(rumble_video_script_serialized_data)
 
-    return HttpResponse("Script executed successfully.")
+        if success:
+            # If the script runs successfully, add a success message
+            messages.success(request, "Script executed successfully.")
+            # Redirect to the rumble_video_list template
+            return redirect('rumble_video_list')
+        else:
+            # Handle the failure case as needed
+            messages.error(request, "Script execution failed.")
+            return render(request, 'rumble_videos/rumble_video_list.html')
+
+
 
 
 @require_http_methods(["POST"])

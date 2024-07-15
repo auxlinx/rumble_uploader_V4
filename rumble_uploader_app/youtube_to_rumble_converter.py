@@ -27,39 +27,6 @@ def convert_youtube_video_to_rumble(request: HttpRequest, youtube_video_pk, inpu
             new_rumble_video.save()
 
             print(new_rumble_video.rumble_primary_category)
-            # # Assign categories based on the model field type
-            # for category_id in input_rumble_video_primary_categories:
-            #     category = get_object_or_404(Category, id=category_id)
-            #     new_rumble_video.rumble_primary_category.add(category)
-
-
-
-            # # Final save to commit any changes made after the initial save
-            # new_rumble_video.save()
-
-            # # Create a new RumbleVideo instance with the converted video details and additional information
-            # rumble_video = RumbleVideo.objects.create(
-            #     rumble_video_title=youtube_video.youtube_video_title,
-            #     rumble_video_description=youtube_video.youtube_video_description,
-            #     rumble_video_url=youtube_video.youtube_video_url,
-            #     rumble_video_file=youtube_video.youtube_video_file,
-            #     rumble_primary_category=input_rumble_video_primary_categories,
-            #     rumble_secondary_category=input_rumble_video_secondary_categories,
-            #     rumble_rumble_tags=input_rumble_rumble_tags,
-            #     rumble_visibility=input_rumble_video_visibility
-            # )
 
 
     return new_rumble_video
-
-
-
-    # rumble_video_title = youtube_video_title
-    # rumble_video_description = youtube_video_description
-    # rumble_video_url = youtube_video_url
-    # rumble_primary_category =
-    # rumble_secondary_category =
-    # rumble_rumble_tags =
-    # rumble_upload_date =
-    # rumble_visibility =
-    # rumble_video_file = youtube_video_file

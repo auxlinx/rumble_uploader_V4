@@ -32,3 +32,11 @@ body.bg-dark a {
     background-color: #000000;
     color: #f8f9fa !important;
 }
+
+
+.limited-text {
+    max-width: 150px; /* Adjust based on your needs */
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }

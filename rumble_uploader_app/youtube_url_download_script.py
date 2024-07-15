@@ -4,20 +4,40 @@ This module provides functions to download videos from YouTube.
 """
 from django.conf import settings
 import os
+import subprocess
 import time
 import urllib.request
 from django.conf import settings
 from urllib.error import HTTPError, URLError, ContentTooShortError
 from http.client import IncompleteRead, RemoteDisconnected
+import requests
+from requests.exceptions import ConnectionError
 from pytube import YouTube, exceptions as pytube_exceptions
 from pytube.exceptions import VideoUnavailable
-from rumble_uploader_app.models import YouTubeVideo
+# from rumble_uploader_app.models import YouTubeVideo
+from requests.exceptions import ConnectionError, ChunkedEncodingError, HTTPError
 
 # Set up proxies
 proxies = {
     'http': 'http://10.10.1.10:3128',
     'https': 'http://10.10.1.10:1080',
 }
+# # Define the base path to the protonvpn_cli directory
+# protonvpn_base_path = r"env\Lib\site-packages\protonvpn_cli"
+
+# # Construct the full path to the protonvpn executable
+# # Assuming the executable is named 'protonvpn-cli' and is located in the specified directory
+# protonvpn_executable_path = os.path.join(protonvpn_base_path, "protonvpn-cli")
+
+# def change_vpn():
+#     # Disconnect from the current VPN server
+#     subprocess.run(["protonvpn_executable_path", "d"], check=True)
+#     time.sleep(5)  # Wait a bit for the disconnection to complete
+
+#     # Reconnect to a random VPN server
+#     subprocess.run(["protonvpn_executable_path", "c", "-r"], check=True)
+#     time.sleep(10)  # Wait a bit for the connection to establish
+
 
 def download_video(youtube_link, save_path, retries=3, backoff_factor=12.5):
     """
@@ -35,6 +55,7 @@ def download_video(youtube_link, save_path, retries=3, backoff_factor=12.5):
     retry = 0
     while retry < retries:
         try:
+            # change_vpn()
             yt = YouTube(youtube_link)
             video_title = yt.title
 
@@ -52,18 +73,11 @@ def download_video(youtube_link, save_path, retries=3, backoff_factor=12.5):
             urllib.request.urlretrieve(thumbnail_url, thumbnail_path)
             thumbnail_path_relative_path = os.path.relpath(thumbnail_path, settings.MEDIA_ROOT)
 
-            #  # Save paths to YouTubeVideo model
-            # youtube_video = YouTubeVideo.objects.create(
-            #     youtube_video_file=youtube_video_path_relative_path,
-            #     youtube_video_thumbnail=thumbnail_path_relative_path
-            # )
-            # youtube_video.save()
-
             print(f"Downloaded '{video_title}' to '{youtube_video_path_relative_path}'")
             print(f"Downloaded thumbnail to '{thumbnail_path_relative_path}'")
             return youtube_video_path_relative_path, thumbnail_path_relative_path
 
-        except (pytube_exceptions.VideoUnavailable, HTTPError, URLError, IncompleteRead, ContentTooShortError, RemoteDisconnected) as e:
+        except (pytube_exceptions.VideoUnavailable, HTTPError, URLError, IncompleteRead, ContentTooShortError, RemoteDisconnected, ConnectionError, ChunkedEncodingError) as e:
             print(f"Attempt {retry + 1} failed with error: {e}")
             if retry < retries - 1:
                 sleep_time = backoff_factor * (2 ** retry)
@@ -76,4 +90,3 @@ def download_video(youtube_link, save_path, retries=3, backoff_factor=12.5):
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             return None, None
-

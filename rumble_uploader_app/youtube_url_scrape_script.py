@@ -42,8 +42,6 @@ def open_youtube(request):
 
         # This will hold all the data we scrape
         data = {}
-        # post_copy = request.POST.copy()
-        # files_copy = request.FILES.copy()
         try:
             # Wait for the page to load
             time.sleep(5)
@@ -60,9 +58,6 @@ def open_youtube(request):
 
             # saved path save_path
             save_path = r'static/media/'
-
-            # Download the url's video
-            # download_video(youtube_link, save_path)
 
             youtube_video_path_relative_path, thumbnail_path_relative_path = download_video(youtube_link, save_path)
 

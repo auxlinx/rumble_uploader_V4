@@ -318,8 +318,6 @@ def run_rumble_script(request, pk):
         rumble_video_script_data = ({
             "rumble_video_pk": rumble_video.pk,
             "rumble_account": rumble_video.rumble_account,
-            "rumble_user_name": "randomrumblevideos@protonmail.com",
-            "rumble_password": "XKpE@h!5%j#hTW",
             "videoTitle": rumble_video.rumble_video_title,
             "videoDescription": rumble_video.rumble_video_description,
             "videoTags": rumble_video.rumble_rumble_tags,
@@ -347,7 +345,16 @@ def run_rumble_script(request, pk):
             messages.error(request, "Script execution failed.")
             return render(request, 'rumble_videos/rumble_video_list.html')
 
-
+def upload_all_videos_to_rumble(request):
+    if request.method == 'POST':
+        videos_to_upload = RumbleVideo.objects.filter(uploaded_to_rumble_success=False)
+        for rumble_video in videos_to_upload:
+            # Ensure the primary key (pk) of the video is passed as an argument to run_rumble_script
+            success = run_rumble_script(request, rumble_video.pk)  # Assuming video.pk is the primary key
+            if success:
+                rumble_video.uploaded_to_rumble_success = True
+                rumble_video.save()
+        return HttpResponseRedirect(reverse('rumble_video_list'))
 
 
 @require_http_methods(["POST"])

@@ -68,22 +68,27 @@ VISIBILITY_CHOICES = [
         ('scheduled', 'Scheduled'),
     ]
 
+RUMBLE_ACCOUNT_CHOICES = [
+    ("randomrumblevideos", "randomrumblevideos"),
+    ("rumblearchives", "rumblearchives"),
+    ("therumblewarfootage", "therumblewarfootage"),
+]
 
 class RumbleVideo(models.Model):
-    rumble_account = models.CharField(max_length=200, null=True)
+    rumble_account = models.CharField(max_length=200, null=True, blank=True, choices=RUMBLE_ACCOUNT_CHOICES)
     rumble_video_title = models.CharField(max_length=200)
     rumble_video_description = models.TextField(null=True)
-    rumble_video_url = models.URLField(max_length=200,null=True)
+    rumble_video_url = models.URLField(max_length=200, null=True, blank=True)
     rumble_primary_category = models.CharField(max_length=200, null=True, choices=PRIMARY_CATEGORY_CHOICES)
     rumble_secondary_category = models.CharField(max_length=200, null=True)
     rumble_rumble_tags = models.CharField(max_length=200, null=True)
     rumble_upload_date = models.DateTimeField(auto_now_add=True, null=True)
     rumble_visibility = models.CharField(max_length=100, null=True, choices=VISIBILITY_CHOICES)
     rumble_video_file = models.FileField(upload_to='videos/', null=True)
-    rumble_thumbnail = models.ImageField(upload_to='thumbnails/', null=True, validators=[validate_image_type])
-    rumble_direct_link = models.TextField(null=True)
-    rumble_embed_code = models.TextField(null=True)
-    rumble_monetized_embed = models.TextField(null=True)
+    rumble_thumbnail = models.ImageField(upload_to='thumbnails/', null=True, blank=True, validators=[validate_image_type])
+    rumble_direct_link = models.TextField(null=True, blank=True)
+    rumble_embed_code = models.TextField(null=True, blank=True)
+    rumble_monetized_embed = models.TextField(null=True, blank=True)
     uploaded_to_rumble_success = models.BooleanField(default=False)
     objects = models.Manager()
 

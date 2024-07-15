@@ -95,9 +95,23 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     env_file_path = r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\.env'
     load_dotenv(env_file_path)
 
-    # Access the RUMBLE_USERNAME environment variable
-    rumble_username = os.getenv('RUMBLE_USERNAME_randomrumblevideos')
-    rumble_password = os.getenv('RUMBLE_PASSWORD_randomrumblevideos')
+    # Assuming rumble_account holds the account identifier
+    # rumble_account = 'randomrumblevideos'  # This can be dynamically set as needed
+    rumble_account = rumble_video_data["rumble_account"]
+    # Dynamically construct the environment variable names
+    rumble_username_env_var = f'RUMBLE_USERNAME_{rumble_account}'
+    rumble_password_env_var = f'RUMBLE_PASSWORD_{rumble_account}'
+    print(rumble_username_env_var)
+    print(rumble_password_env_var)
+    # Access the environment variables to get the username and password
+    rumble_username = os.getenv(rumble_username_env_var)
+    rumble_password = os.getenv(rumble_password_env_var)
+    print(rumble_username)
+    print(rumble_password)
+    # # Access the RUMBLE_USERNAME environment variable
+    # rumble_username = os.getenv('RUMBLE_USERNAME_randomrumblevideos')
+    # rumble_password = os.getenv('RUMBLE_PASSWORD_randomrumblevideos')
+
 
     # Sign in to Rumble account
     try:

@@ -26,11 +26,13 @@ from rumble_uploader_app.views import ( home,
     youtube_url_list,
     youtube_url_delete,
     youtube_url_update,
-    run_rumble_script,
     file_upload_view,
     download_view,
     scrape_youtube_view,
     error_view,
+    # Scripts
+    run_rumble_script,
+    upload_all_videos_to_rumble,
     )
 
 urlpatterns = [
@@ -66,5 +68,6 @@ urlpatterns = [
     # script running url
     path('run_rumble_script/<int:pk>/', run_rumble_script, name='run_rumble_script'),
     path('scrape_youtube/', scrape_youtube_view, name='scrape_youtube'),
+    path('upload-videos/', upload_all_videos_to_rumble, name='upload_videos'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

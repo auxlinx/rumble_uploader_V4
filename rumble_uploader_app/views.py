@@ -69,6 +69,18 @@ def home(request):
     current_datetime = datetime.now()
     return render(request, 'home.html', {'current_datetime': current_datetime})
 
+# display Ip address
+
+import requests
+
+def display_ip_address(request):
+    """
+    Function docstring describing the purpose of the function.
+    """
+    response = requests.get('https://api.ipify.org')
+    return HttpResponse(f'Current IP: {response.text}')
+
+
 # rumble video views
 
 def rumble_upload_video(request):
@@ -191,6 +203,7 @@ def rumble_video_update(request, pk):
 
 # youtube url
 
+
 def youtube_url_upload(request):
     if request.method == 'POST':
         form = YouTubeURLForm(request.POST)
@@ -216,16 +229,14 @@ def youtube_url_add(request):
     Function docstring describing the purpose of the function.
     """
     if request.method == 'POST':
-        form = YouTubeVideoForm(request.POST, request.FILES)
+        form = YouTubeURLForm()
         if form.is_valid():
             form.save()
             return redirect('youtube_url_list')
         else:
             print(form.errors)
             return render(request, 'url/youtube_url_add_form.html', {'form': form})
-    else:
-        form = YouTubeVideoForm()
-    return render(request, 'url/youtube_url_add_form.html', {'form': form})
+
 
 def youtube_url_detail(request, pk):
     youtube_url = get_object_or_404(YouTubeURL, pk=pk)

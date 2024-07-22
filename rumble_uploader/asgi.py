@@ -11,6 +11,10 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'rumble_uploader.settings')
+
+# os.environ['HTTP_PROXY'] = "http://10.10.1.10:3128"
+# os.environ['HTTPS_PROXY'] = "http://10.10.1.10:1080"
 
 application = get_asgi_application()

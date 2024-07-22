@@ -96,7 +96,6 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     load_dotenv(env_file_path)
 
     # Assuming rumble_account holds the account identifier
-    # rumble_account = 'randomrumblevideos'  # This can be dynamically set as needed
     rumble_account = rumble_video_data["rumble_account"]
     # Dynamically construct the environment variable names
     rumble_username_env_var = f'RUMBLE_USERNAME_{rumble_account}'
@@ -108,9 +107,6 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     rumble_password = os.getenv(rumble_password_env_var)
     print(rumble_username)
     print(rumble_password)
-    # # Access the RUMBLE_USERNAME environment variable
-    # rumble_username = os.getenv('RUMBLE_USERNAME_randomrumblevideos')
-    # rumble_password = os.getenv('RUMBLE_PASSWORD_randomrumblevideos')
 
 
     # Sign in to Rumble account

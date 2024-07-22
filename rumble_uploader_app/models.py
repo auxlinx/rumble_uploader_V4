@@ -95,10 +95,6 @@ class RumbleVideo(models.Model):
     def __str__(self):
         return str(self.rumble_video_title)
 
-
-
-
-
 class YouTubeVideo(models.Model):
     youtube_video_url = models.URLField(max_length=200, null=True)
     youtube_video_title = models.CharField(max_length=200)
@@ -123,54 +119,15 @@ class YouTubeVideo(models.Model):
     def __str__(self):
         return str(self.youtube_video_title)
 
-    # def save(self, *args, **kwargs):
-    #     # Sanitize the video title to use as a filename
-    #     sanitized_title = sanitize_filename(self.youtube_video_title)
-    #     # Use slugify to further ensure a safe filename
-    #     safe_filename = slugify(sanitized_title)
-    #     # Now you can use safe_filename as part of your file path
-    #     # Example: self.youtube_video_file.name = f"videos/{safe_filename}.mp4"
-    #     super(YouTubeVideo, self).save(*args, **kwargs)
-
 class YouTubeURL(models.Model):
     """
     Represents a YouTube URL.
     """
     youtube_video_url = models.URLField(max_length=200, null=True)
-    youtube_video_title = models.CharField(max_length=200)
-    youtube_video_description = models.TextField(null=True)
-    youtube_video_channel = models.TextField(null=True)
-    youtube_view_count = models.BigIntegerField(null=True)
-    youtube_video_likes = models.BigIntegerField(null=True)
-    youtube_video_published_date = models.DateField(null=True)
-    youtube_video_upload_date = models.DateTimeField(null=True)
-    youtube_video_downloaded = models.BooleanField(default=False)  # Add this field
-    youtube_video_file = models.FileField(upload_to='videos/', max_length=255, null=True)
-    youtube_video_thumbnail = models.ImageField(upload_to='thumbnails/', null=True)
+    youtube_video_downloaded_successfully = models.BooleanField(default=False)
     objects = models.Manager()
 
-    def save(self, *args, **kwargs):
-        if self.youtube_video_downloaded:
-            self.youtube_video_date_downloaded = timezone.now()
-        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return str(self.youtube_video_url)
-
-    # def run_test_script(self):
-    #     """
-    #     Runs a test script using the Chrome WebDriver.
-    #     """
-    #     # Instantiate the Chrome WebDriver
-    #     driver = webdriver.Chrome()
-
-    #     # Navigate to a website
-    #     driver.get('https://www.google.com')
-
-    #     # Perform actions (like search, click, etc.)
-    #     search_box = driver.find_element_by_name('q')
-    #     search_box.send_keys('Hello, World!')
-    #     search_box.submit()
-
-    #     # Close the browser
-    #     driver.quit()

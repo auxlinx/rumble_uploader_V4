@@ -149,3 +149,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media')
 # Construct the path to the chromedriver
 SELENIUM_WEBDRIVER_PATH = os.path.join(BASE_DIR, '..', 'drivers', 'chromedriver.exe')
 
+# # Proxy Configuration
+# REQUESTS_PROXY = {
+#     'http': 'http://10.10.1.10:3128',
+#     'https': 'https://10.10.1.11:1080',
+# }

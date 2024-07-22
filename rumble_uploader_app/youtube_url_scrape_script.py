@@ -5,7 +5,6 @@ This module scrapes data from YouTube.
 import time
 import logging
 from datetime import datetime
-import os
 import re
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse  # Import JsonResponse
@@ -14,14 +13,22 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
-from rumble_uploader_app.forms import YouTubeVideoForm
+# from rumble_uploader_app.forms import YouTubeVideoForm
 from .youtube_url_download_script import download_video
 from rumble_uploader_app.models import YouTubeVideo
+
+    # Set up proxies
+proxies = {
+    'http': 'http://10.10.1.10:3128',
+    'https': 'http://10.10.1.10:1080',
+}
 
 def open_youtube(request):
     """
     Opens the YouTube website using Selenium WebDriver.
     """
+
+
     if request.method == 'POST':
         youtube_link = request.POST['youtube_link']
         options = webdriver.ChromeOptions()
@@ -33,6 +40,10 @@ def open_youtube(request):
         options.add_argument("--remote-debugging-port=9222")  # If you need to connect to the browser for debugging.
         options.add_argument("--verbose")
         options.add_argument("--log-path=chromedriver.log")
+
+        # # Configure proxies
+        # proxy_argument = f'--proxy-server=http={proxies["http"]};https={proxies["https"]}'
+        # options.add_argument(proxy_argument)
 
         # Ensure ChromeDriver is up-to-date and specify options
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)

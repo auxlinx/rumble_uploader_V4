@@ -5,7 +5,9 @@ from .views import open_youtube  # Adjust the import path according to your proj
 
 
 from rumble_uploader_app.views import ( home,
-                                    #    Rumble videos
+    #  Display IP address
+    display_ip_address,
+    #    Rumble videos
     rumble_upload_video,
     rumble_video_list,
     rumble_video_detail,
@@ -40,6 +42,7 @@ urlpatterns = [
     path('upload/', file_upload_view, name='file_upload'),
     path('download/', download_view, name='file_download'),
     path('error/', error_view, name='error_view'),
+    path('show-ip/', display_ip_address, name='show_ip'),
     #  Home
     path('', home, name='home'),
     # youtube url
@@ -67,7 +70,7 @@ urlpatterns = [
     path('convert-video/', convert_video, name='convert_video'),
     # script running url
     path('run_rumble_script/<int:pk>/', run_rumble_script, name='run_rumble_script'),
-    path('scrape_youtube/', scrape_youtube_view, name='scrape_youtube'),
+    path('scrape_youtube/<int:pk>/', run_rumble_script, name='scrape_youtube'),
     path('upload-videos/', upload_all_videos_to_rumble, name='upload_videos'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

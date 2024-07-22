@@ -13,43 +13,34 @@
             <thead>
                 <tr>
                     <th>YT URL</th>
-                    <th>YT Title</th>
-                    <th>YT Video Description</th>
-                    <th>YT Channel</th>
-                    <th>YT View Count</th>
-                    <th>YT Likes</th>
-                    <th>YT Posted Date</th>
-                    <th>YT Upload Date</th>
-                    <th>YT Video file</th>
-                    <th>YT Thumbnail</th>
-                    <th>YT URL Delete</th>
-                    <th>YT URL Update</th>
+                    <th>YouTube Video Download Success</th>
                 </tr>
             </thead>
             <tbody>
-                {% for url in urls %}
+                {% for youtube_url in youtube_urls %}
                     <tr>
-                        <td>{{ url.youtube_video_url }}</td>
-                        <td>{{ url.youtube_video_title }}</td>
-                        <td>{{ url.youtube_video_description }}</td>
-                        <td>{{ url.youtube_channel }}</td>
-                        <td>{{ url.youtube_view_count }}</td>
-                        <td>{{ url.youtube_video_likes }}</td>
-                        <td>{{ url.youtube_video_published_date }}</td>
-                        <td>{{ url.youtube_video_upload_date }}</td>
-                        <td>{{ url.youtube_video_file }}</td>
-                        <td>{{ url.youtube_video_thumbnail }}</td>
-
+                        <td>{{ youtube_url.youtube_video_url }}</td>
+                        <td>{{ youtube_url.youtube_video_downloaded_successfully }}</td>
                         <td>
-                            <form method="POST" action="{% url 'youtube_url_delete' url.pk %}">
+                            <form method="POST" action="{% url 'youtube_url_delete' youtube_url.pk %}">
                                 {% csrf_token %}
                                 <input type="submit" value="Delete">
                             </form>
                         </td>
                         <td>
-                            <form method="POST" action="{% url 'youtube_url_update' url.pk %}">
+                            <form method="POST" action="{% url 'youtube_url_update' youtube_url.pk %}">
                                 {% csrf_token %}
                                 <input type="submit" value="Update">
+                            </form>
+                        </td>
+                        <td>
+                            <form action="{% url 'scrape_youtube' %}" method="post">
+                                {% csrf_token %}
+                                <!-- Hidden input for passing youtube_video_url -->
+                                <input type="hidden" name="youtube_link" value={{ youtube_url.youtube_video_url|safe }}>
+
+                                <!-- Submit button -->
+                                <button type="submit">Scrape YouTube</button>
                             </form>
                         </td>
                     </tr>

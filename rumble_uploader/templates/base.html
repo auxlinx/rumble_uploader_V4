@@ -16,7 +16,7 @@
                                 YouTube URLs
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkYouTube">
-                                <a class="dropdown-item" href="{% url 'youtube_url_upload' %}">Add YouTube URL</a>
+                                <!-- <a class="dropdown-item" href="{% url 'youtube_url_upload' %}">Add YouTube URL</a> -->
                                 <a class="dropdown-item" href="{% url 'youtube_url_add' %}">Add Full YouTube URL</a>
                                 <a class="dropdown-item" href="{% url 'youtube_url_list' %}">YouTube URL List</a>
                             </div>
@@ -46,7 +46,10 @@
                 </div>
             </nav>
         </div>
-
+        <div>
+            <h2>IP Address</h2>
+            <a href="{% url 'show_ip' %}">Show My IP Address</a>
+        </div>
         <div class="my-5 text-center container">
             {% block content %}
             {% endblock %}

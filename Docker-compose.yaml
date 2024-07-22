@@ -9,10 +9,13 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - Ewe=value
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    # networks:
+    #   - web_network
 
 
   pg-admin:
@@ -28,6 +31,8 @@ services:
       - "8080:80"
     depends_on:
       - db
+    # networks:
+    #   - web_network
 
 
   web:
@@ -41,24 +46,33 @@ services:
       - .:/code
       - postgres_data:/var/lib/postgresql/data/
       - ./static:/code/static  # Map the static directory from host to container
-
+    dns:
+      - 8.8.8.8
     ports:
       - "8000:8000"
     depends_on:
-      - db
+          - db
+    # networks:
+    #   - web_network
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - PROXY_URL=http://proton-privox:8080 # Use the service name as the hostname
+      # - HTTP_PROXY=http://proton-privoxy:8118
+      # - HTTPS_PROXY=http://proton-privoxy:8118
+      - Ewe=value
+
 
   proton-privoxy:
     image: walt3rl/proton-privoxy
-    env_file:
-      - ./.env
     container_name: proton-privoxy
+    env_file:
+      - .env
     environment:
-      - PVPN_USERNAME=${OpenVPNIKEv2username}
-      - PVPN_PASSWORD=${OpenVPNIKEv2password}
+      - PVPN_USERNAME=${PVPN_USERNAME}
+      - PVPN_PASSWORD=${PVPN_PASSWORD}
+      - Ewe=value
     volumes:
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -68,3 +82,11 @@ services:
       - /dev/net/tun
     cap_add:
       - NET_ADMIN
+      - NET_RAW
+    depends_on:
+      - db
+#     networks:
+#       - web_network
+
+# networks:
+#   web_network:

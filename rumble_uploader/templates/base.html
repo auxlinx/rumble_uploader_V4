@@ -2,13 +2,13 @@
 
 <html>
     <head>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-        <link href="{% static 'style.css' %}" rel="stylesheet">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link href="{% static 'css/style.css' %}" rel="stylesheet">
     </head>
-    <body class="bg-dark text-white">
-        <div class="d-flex">
+    <body class="bg-dark">
+        <div class="container-flex-left"> <!-- Start container-flex-left for navbar -->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <div class="collapse navbar-collapse justify-content-center" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <!-- YouTube URL Dropdown -->
                         <li class="nav-item dropdown">
@@ -46,16 +46,18 @@
                 </div>
             </nav>
         </div>
+
         <div>
-            <h2>IP Address</h2>
-            <a href="{% url 'show_ip' %}">Show My IP Address</a>
-        </div>
-        <div class="my-5 text-center container">
-            {% block content %}
-            {% endblock %}
-        </div>
+            <div>
+                <h2>IP Address</h2>
+                <a href="{% url 'show_ip' %}">Show My IP Address</a>
+            </div>
+                {% block content %}
+                {% endblock %}
+            </div>
     </body>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </html>

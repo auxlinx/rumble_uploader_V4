@@ -15,8 +15,8 @@
     <div class="full-screen-table-container"> <!-- Full-screen table container -->
         <form method="POST" action="{% url 'convert_video' %}" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="table table-dark h-100">
-                <table class="table table-dark" style="table-layout: auto; width: 100%;">
+            <div>
+                <table id="youtubeVideoTable" class="VideoTableDark">
                     <thead>
                         <tr>
                             <th>YT Title</th>
@@ -29,7 +29,6 @@
                             <th>Rumble Tags</th>
                             <th>Rumble Visibility</th>
                             <th>Run YouTube to Rumble Conversion Script</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,34 +79,39 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="pagination">
-                <span class="step-links">
-                    {% if page_obj.has_previous %}
-                        <a href="?page=1">&laquo; first</a>
-                        <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                    {% endif %}
-
-                    <span class="current">
-                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                    </span>
-
-                    {% if page_obj.has_next %}
-                        <a href="?page={{ page_obj.next_page_number }}">next</a>
-                        <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                    {% endif %}
-                </span>
-            </div>
-
-
         </form>
     </div>
 
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
     <script>
         $(document).ready(function() {
-            setTimeout(function() {
-                $(".alert").fadeOut('slow');
-            }, 5000); // 5 seconds
+            $('#youtubeVideoTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "dom": 'lBfrtip',
+                "buttons": [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ],
+                "columnDefs": [
+                    {
+                        "targets": [4, 5, 6, 7, 8], // Specify the column indices you want to make non-searchable
+                        "searchable": false
+                    }
+                    // You can add more objects to this array to set options for other columns
+                ]
+            });
+
+            // Your existing code for populating the dropdown and setting up the change event listener
         });
-        </script>
+    </script>
 {% endblock %}

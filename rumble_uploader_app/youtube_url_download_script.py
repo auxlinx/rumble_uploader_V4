@@ -9,11 +9,10 @@ import time
 import urllib.request
 from django.conf import settings
 from urllib.error import HTTPError, URLError, ContentTooShortError
-from http.client import IncompleteRead, RemoteDisconnected
-from requests.exceptions import ConnectionError
+from http.client import IncompleteRead, RemoteDisconnected, IncompleteRead
 from pytube import YouTube, exceptions as pytube_exceptions
 from requests.exceptions import ConnectionError, ChunkedEncodingError, HTTPError
-
+from urllib.error import HTTPError
 
 
 # Set up proxies
@@ -40,7 +39,7 @@ proxies = {
 #     time.sleep(10)  # Wait a bit for the connection to establish
 
 
-def download_video(youtube_link, save_path, retries=3, backoff_factor=12.5):
+def download_youtube_video(youtube_link, save_path, retries=3, backoff_factor=1):
     """
     Download a video from YouTube.
 
@@ -79,7 +78,20 @@ def download_video(youtube_link, save_path, retries=3, backoff_factor=12.5):
             print(f"Downloaded thumbnail to '{thumbnail_path_relative_path}'")
             return youtube_video_path_relative_path, thumbnail_path_relative_path
 
-        except (pytube_exceptions.VideoUnavailable, HTTPError, URLError, IncompleteRead, ContentTooShortError, RemoteDisconnected, ConnectionError, ChunkedEncodingError) as e:
+        except HTTPError as e:
+            if e.code == 429:  # Rate limited
+                retry_after = e.headers.get("Retry-After")
+                wait = int(retry_after) if retry_after else backoff_factor * (2 ** retry)
+                print(f"Rate limited. Retrying in {wait} seconds...")
+                time.sleep(wait)
+                retry += 1
+            else:
+                print(f"HTTP error occurred: {e}")
+                return None, None
+        except IncompleteRead:
+            # Oh well, reconnect and keep trucking
+            continue  #
+        except (pytube_exceptions.VideoUnavailable, HTTPError, URLError, ContentTooShortError, RemoteDisconnected, ConnectionError, ChunkedEncodingError) as e:
             print(f"Attempt {retry + 1} failed with error: {e}")
             if retry < retries - 1:
                 sleep_time = backoff_factor * (2 ** retry)

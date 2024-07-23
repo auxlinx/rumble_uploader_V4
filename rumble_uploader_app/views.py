@@ -22,7 +22,7 @@ from rest_framework.decorators import api_view
 from .serializers import YouTubeVideoSerializer, RumbleVideoSerializer
 from .forms import RumbleVideoForm, YouTubeVideoForm, YouTubeURLForm
 from .models import RumbleVideo, YouTubeVideo, YouTubeURL
-from .youtube_url_download_script import download_video
+from .youtube_url_download_script import download_youtube_video
 from .youtube_url_scrape_script import open_youtube
 from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
 from rumble_uploader_app.rumble_uploader import upload_to_rumble
@@ -213,7 +213,7 @@ def youtube_url_upload(request):
             current_dir = os.path.dirname(os.path.abspath(__file__))
             # Construct the relative path to the 'static' directory
             save_path = os.path.join(current_dir, 'static')
-            download_success = download_video(youtube_url, save_path)
+            download_success = download_youtube_video(youtube_url, save_path)
             if download_success:
                 form.save()
                 return redirect('youtube_url_upload')
@@ -229,30 +229,46 @@ def youtube_url_add(request):
     Function docstring describing the purpose of the function.
     """
     if request.method == 'POST':
-        form = YouTubeURLForm()
+        form = YouTubeURLForm(request.POST)  # Pass request.POST to the form
         if form.is_valid():
             form.save()
             return redirect('youtube_url_list')
         else:
-            print(form.errors)
+            # If the form is not valid, re-render the page with the form (containing errors)
             return render(request, 'url/youtube_url_add_form.html', {'form': form})
+    else:
+        # This block will handle GET requests
+        form = YouTubeURLForm()  # Instantiate a new, empty form
+        return render(request, 'url/youtube_url_add_form.html', {'form': form})
 
 
 def youtube_url_detail(request, pk):
+    """
+    Display the details of a YouTube URL.
+    """
     youtube_url = get_object_or_404(YouTubeURL, pk=pk)
     return render(request, 'url/youtube_url_detail.html', {'youtube_url': youtube_url})
 
 def youtube_url_list(request):
+    """
+    Display a list of YouTube URLs.
+    """
     youtube_urls = YouTubeURL.objects.all()
-    return render(request, 'url/youtube_url_list.html', {'youtube_urls': youtube_urls})
+    return render(request, 'youtube_url_list', {'youtube_urls': youtube_urls})
 
 def youtube_url_delete(request, pk):
+    """
+    Delete a YouTube URL.
+    """
     youtube_url = YouTubeURL.objects.get(pk=pk)
     youtube_url.delete()
     messages.success(request, 'URL deleted successfully')
-    return redirect(reverse('url/youtube_url_list'))
+    return redirect(reverse('youtube_url_list'))
 
 def youtube_url_update(request, pk):
+    """
+    Update a YouTube URL.
+    """
     youtube_url = get_object_or_404(YouTubeURL, pk=pk)
     if request.method == 'POST':
         form = YouTubeURLForm(request.POST, instance=youtube_url)

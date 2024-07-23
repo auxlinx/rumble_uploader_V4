@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+
+
+
     {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -9,7 +12,7 @@
     {% endif %}
     <h1>YouTube URL List</h1>
     <div>
-        <table class="table table-dark" style="table-layout: auto; width: 100%;">
+        <table id="youtubeUrlTable" class="VideoTableDark" >
             <thead>
                 <tr>
                     <th>YT URL</th>
@@ -48,21 +51,25 @@
             </tbody>
         </table>
     </div>
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+    <script>
+        $(document).ready(function() {
+            $('#youtubeUrlTable').DataTable({
+                // DataTables options
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "dom": 'lBfrtip',
+            });
+        });
+    </script>
 {% endblock %}

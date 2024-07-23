@@ -40,3 +40,41 @@ body.bg-dark a {
     white-space: nowrap;
     text-overflow: ellipsis;
   }
+
+.container-flex-left {
+    display: flex;
+    justify-content: flex-start;
+    padding: 1em;
+    margin: 1em;
+}
+
+/* Correcting the class name and applying dark theme styles */
+.VideoTableDark {
+  background-color: #000000; /* Dark background for the table */
+  color: #ffffff; /* Light text color for contrast */
+  border-collapse: collapse; /* Optional: for a tighter table look */
+}
+
+.VideoTableDark th,
+.VideoTableDark td {
+  border: 1px solid #000000; /* Slightly lighter border color for distinction */
+  padding: 8px; /* Padding for table cells */
+}
+
+.VideoTableDark th {
+  background-color: #000000; /* Even darker background for table headers */
+  color: #ffffff; /* Ensuring headers are also light-colored for readability */
+}
+
+.VideoTableDark tbody tr:nth-child(odd) {
+  background-color: #222121; /* Zebra striping for rows, odd rows slightly lighter */
+}
+
+.VideoTableDark tbody tr:nth-child(even) {
+  background-color: #222121; /* Zebra striping for rows, odd rows slightly lighter */
+}
+
+
+.VideoTableDark tbody tr:hover {
+  background-color: #222121; /* Hover effect for rows */
+}

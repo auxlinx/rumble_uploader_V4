@@ -14,7 +14,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 # from rumble_uploader_app.forms import YouTubeVideoForm
-from .youtube_url_download_script import download_video
+from .youtube_url_download_script import download_youtube_video
 from rumble_uploader_app.models import YouTubeVideo
 
     # Set up proxies
@@ -70,7 +70,7 @@ def open_youtube(request):
             # saved path save_path
             save_path = r'static/media/'
 
-            youtube_video_path_relative_path, thumbnail_path_relative_path = download_video(youtube_link, save_path)
+            youtube_video_path_relative_path, thumbnail_path_relative_path = download_youtube_video(youtube_link, save_path)
 
             # Use full_path and thumbnail_path as needed
             print(youtube_video_path_relative_path, thumbnail_path_relative_path)

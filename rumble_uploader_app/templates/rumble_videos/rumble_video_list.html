@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
     <h1>Rumble Video List</h1>
     <div>
         <form action="{% url 'upload_videos' %}" method="post">
@@ -10,8 +9,8 @@
             <button type="submit" class="btn btn-primary">Upload All Videos to Rumble</button>
         </form>
     </div>
-    <div class="table table-dark h-100 d-flex justify-content-start">
-        <table class="table table-dark " style="table-layout: auto; width: 100%;">
+    <div>
+        <table id="rumbleVideoTable" class="VideoTableDark">
             <thead>
                 <tr>
                     <th>Rumble Account</th>
@@ -29,6 +28,7 @@
                     <th>Rumble Upload Successful</th>
                     <th>Delete</th>
                     <th>Update</th>
+                    <th>Run Rumble Script</th>
                 </tr>
             </thead>
             <tbody>
@@ -72,21 +72,38 @@
             </tbody>
         </table>
     </div>
-    <div class="pagination">
-        <span class="step-links">
-            {% if page_obj.has_previous %}
-                <a href="?page=1">&laquo; first</a>
-                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-            {% endif %}
 
-            <span class="current">
-                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-            </span>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-            {% endif %}
-        </span>
-    </div>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+
+    <script>
+    $(document).ready(function() {
+        // Set DataTables global error handling
+        $.fn.dataTable.ext.errMode = function(settings, helpPage, message) {
+            console.error(message);
+            // You can add more sophisticated error handling here, such as displaying a user-friendly message on the UI
+        };
+
+        try {
+            // Initialize the DataTable
+            $('#rumbleVideoTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "dom": 'lfrtip',
+            });
+        } catch (error) {
+            console.error('DataTable initialization error:', error);
+            // Handle initialization error, e.g., display a message to the user
+        }
+    });
+    </script>
+
 {% endblock %}

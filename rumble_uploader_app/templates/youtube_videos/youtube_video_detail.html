@@ -22,6 +22,8 @@
                 <th>Upload Date</th>
                 <th>Video File</th>
                 <th>Thumbnail</th>
+                <th>Delete</th>
+                <th>Update</th>
             </tr>
         </thead>
         <tbody>
@@ -34,6 +36,18 @@
                     <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_upload_date }}</td>
                     <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_file }}</td>
                     <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_thumbnail }}</td>
+                    <td style="word-wrap: break-word;">
+                        <form method="POST" action="{% url 'youtube_video_delete' youtube_video.pk %}">
+                            {% csrf_token %}
+                            <input type="submit" value="Delete">
+                        </form>
+                    </td>
+                    <td>
+                        <form method="GET" action="{% url 'youtube_video_update' youtube_video.pk %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Update">
+                        </form>
+                    </td>
                 </tr>
         </tbody>
     </table>

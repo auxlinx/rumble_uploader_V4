@@ -83,7 +83,7 @@ class RumbleVideo(models.Model):
     rumble_secondary_category = models.CharField(max_length=200, null=True)
     rumble_rumble_tags = models.CharField(max_length=200, null=True)
     rumble_upload_date = models.DateTimeField(auto_now_add=True, null=True)
-    rumble_visibility = models.CharField(max_length=100, null=True, choices=VISIBILITY_CHOICES)
+    rumble_visibility = models.CharField(max_length=100, null=True, choices=VISIBILITY_CHOICES, default='Private')
     rumble_video_file = models.FileField(upload_to='videos/', null=True)
     rumble_thumbnail = models.ImageField(upload_to='thumbnails/', null=True, blank=True, validators=[validate_image_type])
     rumble_direct_link = models.TextField(null=True, blank=True)

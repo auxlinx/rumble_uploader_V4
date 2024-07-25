@@ -5,6 +5,7 @@ import subprocess
 import os
 import sys
 import json
+import requests
 import logging
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
@@ -71,7 +72,7 @@ def home(request):
 
 # display Ip address
 
-import requests
+
 
 def display_ip_address(request):
     """
@@ -236,10 +237,9 @@ def youtube_url_add(request):
         else:
             # If the form is not valid, re-render the page with the form (containing errors)
             return render(request, 'url/youtube_url_add_form.html', {'form': form})
-    else:
-        # This block will handle GET requests
-        form = YouTubeURLForm()  # Instantiate a new, empty form
-        return render(request, 'url/youtube_url_add_form.html', {'form': form})
+    # This block will handle GET requests
+    form = YouTubeURLForm()  # Instantiate a new, empty form
+    return render(request, 'url/youtube_url_add_form.html', {'form': form})
 
 
 def youtube_url_detail(request, pk):
@@ -254,7 +254,7 @@ def youtube_url_list(request):
     Display a list of YouTube URLs.
     """
     youtube_urls = YouTubeURL.objects.all()
-    return render(request, 'youtube_url_list', {'youtube_urls': youtube_urls})
+    return render(request, 'url/youtube_url_list.html', {'youtube_urls': youtube_urls})
 
 def youtube_url_delete(request, pk):
     """

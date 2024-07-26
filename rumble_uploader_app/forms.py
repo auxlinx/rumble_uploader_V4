@@ -20,10 +20,10 @@ PRIMARY_CATEGORY_CHOICES = [
     ]
 
 VISIBILITY_CHOICES = [
-        ('Public', 'Public'),
-        ('Unlisted', 'Unlisted'),
-        ('Private', 'Private'),
-        ('Scheduled', 'Scheduled'),
+        ('public', 'Public'),
+        ('unlisted', 'Unlisted'),
+        ('private', 'Private'),
+        ('scheduled', 'Scheduled'),
     ]
 
 class RumbleVideoForm(forms.ModelForm):

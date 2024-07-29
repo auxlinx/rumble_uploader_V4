@@ -104,6 +104,7 @@ class YouTubeVideo(models.Model):
     youtube_video_likes = models.BigIntegerField(null=True)
     youtube_video_published_date = models.DateField(null=True)
     youtube_video_upload_date = models.DateTimeField(null=True)
+    youtube_video_duration = models.DurationField(null=True)
     youtube_video_file = models.FileField(
         upload_to='videos/',
         validators=[validate_file_type],

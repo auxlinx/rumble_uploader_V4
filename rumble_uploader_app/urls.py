@@ -67,7 +67,7 @@ urlpatterns = [
     path('youtube_video/<int:pk>/', youtube_video_detail, name='youtube_video_detail'),
     path('youtube_video/<int:pk>/delete/', youtube_video_delete, name='youtube_video_delete'),
     path('youtube_video/<int:pk>/update/', youtube_video_update, name='youtube_video_update'),
-    path('convert-video/', convert_video, name='convert_video'),
+    path('convert-video/<int:youtube_video_pk>', convert_video, name='convert_video'),
     # script running url
     path('run_rumble_script/<int:pk>/', run_rumble_script, name='run_rumble_script'),
     path('scrape_youtube/<int:pk>/', run_rumble_script, name='scrape_youtube'),

@@ -23,11 +23,11 @@ from rest_framework.decorators import api_view
 from .serializers import YouTubeVideoSerializer, RumbleVideoSerializer
 from .forms import RumbleVideoForm, YouTubeVideoForm, YouTubeURLForm
 from .models import RumbleVideo, YouTubeVideo, YouTubeURL
-from .youtube_url_download_script import download_youtube_video
-from .youtube_url_scrape_script import open_youtube
-from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
-from rumble_uploader_app.rumble_uploader import upload_to_rumble
-
+from rumble_uploader_app.youtube_url_scipts.youtube_url_download_script import download_youtube_video
+from rumble_uploader_app.youtube_url_scipts.youtube_url_scrape_script import open_youtube
+from .youtube_to_rumble_script.youtube_to_rumble_converter import convert_youtube_video_to_rumble
+from rumble_uploader_app.rumble_uploader_script.rumble_uploader import upload_to_rumble
+from rumble_uploader_app.youtube_dl.youtube_dl import download_youtube_video
 
 # from .rumble_uploader import generate_rumble_video_links
 
@@ -121,7 +121,7 @@ def youtube_to_rumble_conversion_list(request):
     return render(request, 'youtube_videos/youtube_video_conversion_list.html', context)
 
 
-def convert_video(request):
+def convert_video(request, youtube_video_pk):
     """
     Convert a YouTube video to a Rumble video.
     """
@@ -165,7 +165,8 @@ def convert_video(request):
         new_rumble_video.save()
 
         # Return a response, e.g., redirect or JSON response
-        return redirect('rumble_video_list')
+
+        return redirect('youtube_to_rumble_conversion_list')
 
 def rumble_video_detail(request, pk):
     rumble_video = get_object_or_404(RumbleVideo, pk=pk)
@@ -407,3 +408,17 @@ def scrape_youtube_view(request):
             return JsonResponse({'error': 'Failed to scrape YouTube.', 'details': str(e)}, status=500)
     else:
         return HttpResponseBadRequest("Invalid input.")
+
+@require_http_methods(["POST"])
+def youtube_dl(requests):
+    if request.method == 'POST':
+        url = request.POST.get('url')
+        if url:
+            youtube_video = download_youtube_video(url)
+            if youtube_video:
+                return HttpResponse(f"Video '{youtube_video.title}' downloaded successfully!")
+            else:
+                return HttpResponse("Failed to download the video.")
+        else:
+            return HttpResponse("No URL provided.")
+    return render(request, 'download_video.html')

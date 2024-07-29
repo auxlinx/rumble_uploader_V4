@@ -13,3 +13,4 @@ webdriver_manager>=4.0.1,<5.0  # Allows updates within the 4.x versions
 flake8>=3.9,<4.0  # Allows updates within the 3.x versions
 pytube>=12.0.0  # Specify a minimum version based on the latest known compatible version
 python-dotenv>=1.0.1
+youtube_dl>=2021.6.6

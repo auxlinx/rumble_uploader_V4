@@ -1,36 +1,29 @@
 """
 Module docstring describing the purpose of the module.
 """
-import subprocess
 import os
-import sys
 import json
 import requests
 import logging
-import youtube_dl
 from selenium.common.exceptions import NoSuchElementException
 from dotenv import load_dotenv
 from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
-from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
 from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse, HttpResponseBadRequest,HttpResponse, HttpResponseNotFound
 from django.views.decorators.http import require_http_methods
-from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
-import logging
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializers import YouTubeVideoSerializer, RumbleVideoSerializer
 from .forms import RumbleVideoForm, YouTubeVideoForm, YouTubeURLForm
 from .models import RumbleVideo, YouTubeVideo, YouTubeURL
+from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 from rumble_uploader_app.youtube_url_scipts.youtube_url_download_script import download_youtube_video
 from rumble_uploader_app.youtube_url_scipts.youtube_url_scrape_script import open_youtube
-from .youtube_to_rumble_script.youtube_to_rumble_converter import convert_youtube_video_to_rumble
+# from rumble_uploader_app.youtube_to_rumble_script.youtube_to_rumble_converter import convert_youtube_video_to_rumble
 from rumble_uploader_app.rumble_uploader_script.rumble_uploader import upload_to_rumble
-
 
 
 # from .rumble_uploader import generate_rumble_video_links
@@ -397,9 +390,8 @@ def scrape_youtube(request):
     form = YouTubeVideoForm(request.POST, request.FILES)
     if form.is_valid():
         query = form.cleaned_data['query']
-        youtube_video_url = form.cleaned_data['youtube_video_url']
         try:
-            data = open_youtube(query, youtube_video_url)  # Assume this returns        static_file_path = r'/static/media/videos/%(title)s.%(ext)s'  # Change this to your desired pathary with keys matching YouTubeVideo model fields
+            data = open_youtube(query)  # Assume this returns        static_file_path = r'/static/media/videos/%(title)s.%(ext)s'  # Change this to your desired pathary with keys matching YouTubeVideo model fields
             video, created = YouTubeVideo.objects.update_or_create(
                 query=query,
                 defaults=data,

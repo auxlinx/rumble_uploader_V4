@@ -23,7 +23,7 @@ proxies = {
     'https': 'http://10.10.1.10:1080',
 }
 
-def open_youtube(request, youtube_video_url):
+def open_youtube(request):
     """
     Opens the YouTube website using Selenium WebDriver.
     """
@@ -149,4 +149,4 @@ def open_youtube(request, youtube_video_url):
         except ValueError as e:
             # If an error occurs, close the driver and return an error message
             driver.quit()
-            return JsonResponse({'error': str(e)}, status=500
+            return JsonResponse({'error': str(e)}, status=500)

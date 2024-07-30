@@ -1,7 +1,6 @@
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-# from .views import open_youtube  # Adjust the import path according to your project structure
 
 
 from rumble_uploader_app.views import ( home,
@@ -30,7 +29,6 @@ from rumble_uploader_app.views import ( home,
     youtube_url_update,
     file_upload_view,
     download_view,
-    # open_youtube,
     error_view,
     # Scripts
     run_rumble_script,
@@ -50,8 +48,6 @@ urlpatterns = [
     path('youtube_url_upload', youtube_url_upload, name='youtube_url_upload'),
     path('youtube_urls/', youtube_url_list, name='youtube_url_list'),
     path('youtube_url/<int:pk>/', youtube_url_detail, name='youtube_url_detail'),
-    # path('scrape_youtube/', open_youtube, name='scrape_youtube'),
-    # path('youtube_url/<int:pk>/', youtube_url_scrape_detail, name='youtube_url_scrape_detail'),
     path('youtube_url/<int:pk>/delete/', youtube_url_delete, name='youtube_url_delete'),
     path('youtube_url/<int:pk>/update/', youtube_url_update, name='youtube_url_update'),
     # rumble video urls

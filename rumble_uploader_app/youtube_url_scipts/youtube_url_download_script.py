@@ -2,18 +2,19 @@
 """
 This module provides functions to download videos from YouTube.
 """
-import subprocess
-from django.conf import settings
 import os
 import time
 import urllib.request
-from django.conf import settings
-from urllib.error import HTTPError, URLError, ContentTooShortError
-from http.client import IncompleteRead, RemoteDisconnected, IncompleteRead
-from pytube import YouTube, exceptions as pytube_exceptions
-from requests.exceptions import ConnectionError, ChunkedEncodingError, HTTPError
-from urllib.error import HTTPError
+import logging
 
+from urllib.error import URLError, ContentTooShortError, HTTPError
+from http.client import IncompleteRead, RemoteDisconnected
+from django.conf import settings
+from pytube import YouTube, exceptions as pytube_exceptions
+from requests.exceptions import ChunkedEncodingError
+from urllib.error import HTTPError as urllib_HTTPError
+
+logger = logging.getLogger(__name__)
 
 
 # Set up proxies
@@ -22,14 +23,12 @@ proxies = {
     'https': 'http://10.10.1.10:1080',
 }
 
-
-
-def download_youtube_video(youtube_link, save_path, retries=3, backoff_factor=1):
+def download_youtube_video(youtube_video_url, save_path, retries=3, backoff_factor=1):
     """
     Download a video from YouTube.
 
     Args:
-        youtube_link (str): The YouTube video link.
+        youtube_video_url (str): The YouTube video link.
         save_path (str): The path to save the downloaded video.
         retries (int, optional): The number of retries in case of failure. Defaults to 3.
         backoff_factor (float, optional): The backoff factor for exponential backoff. Defaults to 12.5.
@@ -41,7 +40,7 @@ def download_youtube_video(youtube_link, save_path, retries=3, backoff_factor=1)
     retry = 0
     while retry < retries:
         try:
-            yt = YouTube(youtube_link)
+            yt = YouTube(youtube_video_url)
             video_title = yt.title
 
             videos_path = os.path.join(settings.MEDIA_ROOT, 'videos')
@@ -66,25 +65,25 @@ def download_youtube_video(youtube_link, save_path, retries=3, backoff_factor=1)
             if e.code == 429:  # Rate limited
                 retry_after = e.headers.get("Retry-After")
                 wait = int(retry_after) if retry_after else backoff_factor * (2 ** retry)
-                print(f"Rate limited. Retrying in {wait} seconds...")
+                logger.warning("Rate limited. Retrying in %s seconds...", wait)
                 time.sleep(wait)
                 retry += 1
             else:
-                print(f"HTTP error occurred: {e}")
+                logger.error("HTTP error occurred: %s", e)
                 return None, None
         except IncompleteRead:
             # Oh well, reconnect and keep trucking
-            continue  #
-        except (pytube_exceptions.VideoUnavailable, HTTPError, URLError, ContentTooShortError, RemoteDisconnected, ConnectionError, ChunkedEncodingError) as e:
-            print(f"Attempt {retry + 1} failed with error: {e}")
+            continue
+        except (pytube_exceptions.VideoUnavailable, URLError, ContentTooShortError, RemoteDisconnected, ConnectionError, ChunkedEncodingError) as e:
+            logger.warning("Attempt %s failed with error: %s", retry + 1, e)
             if retry < retries - 1:
                 sleep_time = backoff_factor * (2 ** retry)
-                print(f"Retrying in {sleep_time} seconds...")
+                logger.info("Retrying in %s seconds...", sleep_time)
                 time.sleep(sleep_time)
                 retry += 1
             else:
-                print(f"Failed to download video after {retries} attempts.")
+                logger.error("Failed to download video after %s attempts.", retries)
                 return None, None
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            logger.error("An unexpected error occurred: %s", e)
             return None, None

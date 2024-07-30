@@ -39,20 +39,7 @@
                         <td>
                             <form action="{% url 'scrape_youtube' %}" method="post">
                                 {% csrf_token %}
-                                <!-- Hidden input for passing youtube_video_url -->
-                                <input type="hidden" name="youtube_link" value={{ youtube_url.youtube_video_url|safe }}>
-
-                                <!-- Submit button -->
-                                <button type="submit">Scrape YouTube</button>
-                            </form>
-                        </td>
-                        <td>
-                            <form action="{% url 'scrape_youtube' %}" method="post">
-                                {% csrf_token %}
-                                <!-- Hidden input for passing youtube_video_url -->
-                                <input type="hidden" name="youtube_link" value={{ youtube_url.youtube_video_url|safe }}>
-
-                                <!-- Submit button -->
+                                <input type="hidden" name="youtube_link" value="{{ youtube_url.youtube_video_url|safe }}">
                                 <button type="submit">Scrape YouTube</button>
                             </form>
                         </td>

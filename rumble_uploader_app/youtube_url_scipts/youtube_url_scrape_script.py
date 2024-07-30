@@ -23,14 +23,13 @@ proxies = {
     'https': 'http://10.10.1.10:1080',
 }
 
-def open_youtube(request):
+def open_youtube(request, youtube_video_url):
     """
     Opens the YouTube website using Selenium WebDriver.
     """
 
-
     if request.method == 'POST':
-        youtube_link = request.POST['youtube_link']
+        youtube_video_url = request.POST['youtube_video_url']
         options = webdriver.ChromeOptions()
 
         # Add arguments to ChromeOptions to address the issue
@@ -49,7 +48,7 @@ def open_youtube(request):
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
         # Open YouTube
-        driver.get(youtube_link)
+        driver.get(youtube_video_url)
 
         # This will hold all the data we scrape
         data = {}
@@ -70,7 +69,7 @@ def open_youtube(request):
             # saved path save_path
             save_path = r'static/media/'
 
-            youtube_video_path_relative_path, thumbnail_path_relative_path = download_youtube_video(youtube_link, save_path)
+            youtube_video_path_relative_path, thumbnail_path_relative_path = download_youtube_video(youtube_video_url, save_path)
 
             # Use full_path and thumbnail_path as needed
             print(youtube_video_path_relative_path, thumbnail_path_relative_path)
@@ -150,7 +149,4 @@ def open_youtube(request):
         except ValueError as e:
             # If an error occurs, close the driver and return an error message
             driver.quit()
-            return JsonResponse({'error': str(e)}, status=500)
-        except Exception as e:
-            logging.error("An unexpected error occurred: %s", e)
-            return JsonResponse({'error': 'An unexpected error occurred'}, status=500)
+            return JsonResponse({'error': str(e)}, status=500

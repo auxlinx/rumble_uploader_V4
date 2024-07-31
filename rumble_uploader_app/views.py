@@ -125,7 +125,7 @@ def youtube_to_rumble_conversion_list(request):
     return render(request, 'youtube_videos/youtube_video_conversion_list.html', context)
 
 
-def convert_video(request, youtube_video.pk):
+def convert_video(request, youtube_video_pk):
     """
     Convert a YouTube video to a Rumble video.
     """

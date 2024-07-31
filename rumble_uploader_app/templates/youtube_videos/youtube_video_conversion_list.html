@@ -13,8 +13,7 @@
         {% endif %}
     </div>
     <div class="full-screen-table-container"> <!-- Full-screen table container -->
-        <form method="POST" action="{% url 'convert_video' %}" enctype="multipart/form-data">
-            {% csrf_token %}
+            <input type="hidden" name="youtube_video_pk" value="{{ youtube_video.pk }}">
             <div>
                 <table id="youtubeVideoTable" class="VideoTableDark">
                     <thead>
@@ -39,47 +38,49 @@
                                 <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_url }}</td>
                                 <td style="word-wrap: break-word;">{{ youtube_video.youtube_video_file }}</td>
                                 <td>
-                                    <select name="rumble_accounts">
-                                    {% for account in rumble_accounts %}
-                                        <option value="{{ account }}">{{ account }}</option>
-                                    {% endfor %}
-                                    </select>
+                                    <form method="POST" action="{% url 'convert_video' youtube_video.pk %}" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="youtube_video_pk" value="{{ youtube_video.pk }}">
+                                        <select name="rumble_accounts">
+                                            {% for account in rumble_accounts %}
+                                                <option value="{{ account }}">{{ account }}</option>
+                                            {% endfor %}
+                                        </select>
                                 </td>
                                 <td>
-                                    <select name="rumble_video_primary_categories">
-                                        {% for category in rumble_video_primary_categories %}
-                                            <option value="{{ category }}">{{ category }}</option>
-                                        {% endfor %}
-                                    </select>
+                                        <select name="rumble_video_primary_categories">
+                                            {% for category in rumble_video_primary_categories %}
+                                                <option value="{{ category }}">{{ category }}</option>
+                                            {% endfor %}
+                                        </select>
                                 </td>
                                 <td>
-                                    <select name="rumble_video_secondary_categories">
-                                        {% for category in rumble_video_secondary_categories %}
-                                            <option value="{{ category }}">{{ category }}</option>
-                                        {% endfor %}
-                                    </select>
+                                        <select name="rumble_video_secondary_categories">
+                                            {% for category in rumble_video_secondary_categories %}
+                                                <option value="{{ category }}">{{ category }}</option>
+                                            {% endfor %}
+                                        </select>
                                 </td>
                                 <td>
-                                    <!-- Large text box for Rumble Tags -->
-                                    <textarea name="rumble_tags" style="width: 100%; height: 100px;"></textarea>
+                                        <textarea name="rumble_tags" style="width: 100%; height: 100px;"></textarea>
                                 </td>
                                 <td>
-                                    <select name="rumble_video_visibility">
-                                        {% for category in rumble_video_visibility %}
-                                            <option value="{{ category }}">{{ category }}</option>
-                                        {% endfor %}
-                                    </select>
+                                        <select name="rumble_video_visibility">
+                                            {% for category in rumble_video_visibility %}
+                                                <option value="{{ category }}">{{ category }}</option>
+                                            {% endfor %}
+                                        </select>
                                 </td>
                                 <td>
-                                    <input type="hidden" name="youtube_video_pk" value="{{ youtube_video.pk }}">
-                                    <button type="submit">Convert Video</button>
+                                    <button type="submit">Convert</button>
+                                    </form>
                                 </td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-        </form>
+
     </div>
 
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">

@@ -10,7 +10,7 @@
 {% endif %}
 <form action="{% url 'youtube_url_add' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="youtube_link" placeholder="Enter YouTube link">
+    <input type="text" name="youtube_video_url" placeholder="Enter YouTube link">
     <button type="submit">Add Youtube URL</button>
 </form>
 

@@ -33,7 +33,7 @@ rumble_video_secondary_categories = [
 ]
 
 rumble_video_visibility = [
+"Private",
 "Public",
 "Unlisted",
-"Private"
 ]

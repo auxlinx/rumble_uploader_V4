@@ -14,7 +14,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 # from rumble_uploader_app.forms import YouTubeVideoForm
-from .youtube_url_download_script import download_youtube_video
+from rumble_uploader_app.youtube_url_scipts.youtube_url_download_script import download_youtube_video
 from rumble_uploader_app.models import YouTubeVideo
 
     # Set up proxies

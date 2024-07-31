@@ -62,9 +62,9 @@ PRIMARY_CATEGORY_CHOICES = [
     ]
 
 VISIBILITY_CHOICES = [
+        ('private', 'Private'),
         ('public', 'Public'),
         ('unlisted', 'Unlisted'),
-        ('private', 'Private'),
         ('scheduled', 'Scheduled'),
     ]
 
@@ -112,7 +112,8 @@ class YouTubeVideo(models.Model):
     youtube_video_thumbnail = models.FileField(
         upload_to='thumbnails/',
         validators=[validate_image_type],
-        null=True
+        null=True,
+        blank=True
     )
     objects = models.Manager()
 
@@ -124,10 +125,8 @@ class YouTubeURL(models.Model):
     Represents a YouTube URL.
     """
     youtube_video_url = models.URLField(max_length=200, null=True)
+    youtube_video_title = models.CharField(max_length=200, default="Default Title")
     youtube_video_downloaded_successfully = models.BooleanField(default=False)
     objects = models.Manager()
-
-
-
     def __str__(self):
-        return str(self.youtube_video_url)
+        return str(self.youtube_video_title)

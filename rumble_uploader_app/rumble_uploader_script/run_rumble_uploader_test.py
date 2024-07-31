@@ -3,7 +3,7 @@ This module is responsible for running the rumble uploader test.
 """
 
 import sys
-from rumble_uploader_test import upload_to_rumble
+from rumble_uploader_app.rumble_uploader_script.rumble_uploader_test import upload_to_rumble
 
 # sys.path.append(r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\rumble_uploader_app')
 

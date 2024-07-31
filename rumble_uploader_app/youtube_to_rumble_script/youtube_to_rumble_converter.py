@@ -1,4 +1,4 @@
-from .models import YouTubeVideo, RumbleVideo
+from rumble_uploader_app.models import YouTubeVideo, RumbleVideo
 from django.shortcuts import get_object_or_404
 from django.http import HttpRequest  # For type annotation
 

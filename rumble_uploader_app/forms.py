@@ -20,9 +20,9 @@ PRIMARY_CATEGORY_CHOICES = [
     ]
 
 VISIBILITY_CHOICES = [
+        ('private', 'Private'),
         ('public', 'Public'),
         ('unlisted', 'Unlisted'),
-        ('private', 'Private'),
         ('scheduled', 'Scheduled'),
     ]
 
@@ -73,4 +73,4 @@ class YouTubeURLForm(forms.ModelForm):
         """
 
         model = YouTubeURL
-        fields = ['youtube_video_url']
+        fields = ['youtube_video_url', 'youtube_video_title']

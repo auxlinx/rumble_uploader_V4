@@ -13,6 +13,10 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.db import IntegrityError
+from pytube import YouTube
+from pytube.exceptions import PytubeError
 from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse, HttpResponseBadRequest,HttpResponse, HttpResponseNotFound
 from django.views.decorators.http import require_http_methods
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
@@ -23,10 +27,10 @@ from rest_framework.decorators import api_view
 from .serializers import YouTubeVideoSerializer, RumbleVideoSerializer
 from .forms import RumbleVideoForm, YouTubeVideoForm, YouTubeURLForm
 from .models import RumbleVideo, YouTubeVideo, YouTubeURL
-from .youtube_url_download_script import download_youtube_video
-from .youtube_url_scrape_script import open_youtube
-from .youtube_to_rumble_converter import convert_youtube_video_to_rumble
-from rumble_uploader_app.rumble_uploader import upload_to_rumble
+from .youtube_url_scipts.youtube_url_download_script import download_youtube_video
+from .youtube_url_scipts.youtube_url_scrape_script import open_youtube
+from .youtube_to_rumble_script.youtube_to_rumble_converter import convert_youtube_video_to_rumble
+from rumble_uploader_app.rumble_uploader_script.rumble_uploader import upload_to_rumble
 
 
 # from .rumble_uploader import generate_rumble_video_links
@@ -205,25 +209,6 @@ def rumble_video_update(request, pk):
 # youtube url
 
 
-def youtube_url_upload(request):
-    if request.method == 'POST':
-        form = YouTubeURLForm(request.POST)
-        if form.is_valid():
-            youtube_url = form.cleaned_data.get('youtube_url')
-            # Get the directory of the current script
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            # Construct the relative path to the 'static' directory
-            save_path = os.path.join(current_dir, 'static')
-            download_success = download_youtube_video(youtube_url, save_path)
-            if download_success:
-                form.save()
-                return redirect('youtube_url_upload')
-            else:
-                form.add_error(None, "Failed to download video.")
-    else:
-        form = YouTubeURLForm()
-    return render(request, 'url/youtube_url_upload.html', {'form': form})
-
 
 def youtube_url_add(request):
     """
@@ -232,6 +217,16 @@ def youtube_url_add(request):
     if request.method == 'POST':
         form = YouTubeURLForm(request.POST)  # Pass request.POST to the form
         if form.is_valid():
+            youtube_link = form.cleaned_data['youtube_video_url']
+            try:
+                yt = YouTube(youtube_link)
+                video_title = yt.title
+                form.cleaned_data['youtube_video_title'] = video_title
+            except PytubeError:
+                return render(request, 'url/youtube_url_add_form.html', {
+                    'form': form,
+                    'error_message': 'Failed to fetch video title.'
+                })
             form.save()
             return redirect('youtube_url_list')
         else:

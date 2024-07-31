@@ -15,7 +15,8 @@
         <table id="youtubeUrlTable" class="VideoTableDark" >
             <thead>
                 <tr>
-                    <th>YT URL</th>
+                    <th>YouTube URL</th>
+                    <th>YouTube Video Title</th>
                     <th>YouTube Video Download Success</th>
                 </tr>
             </thead>
@@ -23,6 +24,7 @@
                 {% for youtube_url in youtube_urls %}
                     <tr>
                         <td>{{ youtube_url.youtube_video_url }}</td>
+                        <td> {{youtube_url.youtube_video_title}}</td>
                         <td>{{ youtube_url.youtube_video_downloaded_successfully }}</td>
                         <td>
                             <form method="POST" action="{% url 'youtube_url_delete' youtube_url.pk %}">

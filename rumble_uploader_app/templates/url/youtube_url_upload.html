@@ -8,17 +8,28 @@
   {{ success_message }}
 </div>
 {% endif %}
-<!-- <form action="{% url 'youtube_url_add' %}" method="post">
+
+{% if form.errors %}
+    <div class="form-errors">
+        <ul>
+            {% for field, errors in form.errors.items %}
+                <li>{{ field }}: {{ errors|join:", " }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+<form action="{% url 'youtube_url_upload' %}" method="post">
     {% csrf_token %}
-    <input type="text" name="youtube_link" placeholder="Enter YouTube link">
-    <button type="submit">Add Youtube URL</button>
-</form> -->
+    {{ form.as_p }}
+    <button type="submit">Scrape YouTube URL Info</button>
+</form>
 
-
+<!-- 
 <form action="{% url 'youtube_url_upload' %}" method="post">
     {% csrf_token %}
     <input type="text" name="youtube_link" placeholder="Enter YouTube link">
     <button type="submit">Scrape YouTube URL Info</button>
-</form>
+</form> -->
 
 {% endblock %}

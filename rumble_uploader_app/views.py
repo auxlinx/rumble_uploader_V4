@@ -202,26 +202,47 @@ def rumble_video_update(request, pk):
 
 def youtube_url_upload(request):
     if request.method == 'POST':
+        # Log the raw POST data
+        logger.debug(f"Raw POST data: {request.POST}")
+
         form = YouTubeURLForm(request.POST)
+
+        # Log the cleaned data if form is valid
         if form.is_valid():
+            logger.debug(f"Cleaned form data: {form.cleaned_data}")
+
             youtube_video_url = form.cleaned_data['youtube_video_url']
             try:
                 # Call the scraping function
                 scraped_data = scrape_youtube_data(youtube_video_url)
 
+                # Ensure all required fields are present
+                required_fields = [
+                    'youtube_video_url', 'youtube_video_title', 'youtube_video_description',
+                    'youtube_video_channel', 'youtube_view_count', 'youtube_video_likes',
+                    'youtube_video_published_date', 'youtube_video_upload_date', 'youtube_video_file',
+                    'youtube_video_thumbnail'
+                ]
+                for field in required_fields:
+                    if field not in scraped_data:
+                        raise ValueError(f"Missing required field: {field}")
+
                 # Adjust keys to match form fields
                 youtube_url_scrape_data = {
-                'youtube_video_url': scraped_data['youtube_video_url'],
-                'youtube_video_title': scraped_data['youtube_video_title'],
-                'youtube_video_description': scraped_data['youtube_video_description'],
-                'youtube_video_channel': scraped_data['youtube_video_channel'],
-                'youtube_view_count': scraped_data['youtube_view_count'],
-                'youtube_video_likes': scraped_data['youtube_video_likes'],
-                'youtube_video_published_date':  scraped_data['youtube_video_upload_date'],
-                'youtube_video_upload_date': scraped_data['youtube_video_published_date'],
-                'youtube_video_file': scraped_data['youtube_video_file'],
-                'youtube_video_thumbnail': scraped_data['youtube_video_thumbnail']
-            }
+                    'youtube_video_url': scraped_data['youtube_video_url'],
+                    'youtube_video_title': scraped_data['youtube_video_title'],
+                    'youtube_video_description': scraped_data['youtube_video_description'],
+                    'youtube_video_channel': scraped_data['youtube_video_channel'],
+                    'youtube_view_count': scraped_data['youtube_view_count'],
+                    'youtube_video_likes': scraped_data['youtube_video_likes'],
+                    'youtube_video_published_date': scraped_data['youtube_video_upload_date'],
+                    'youtube_video_upload_date': scraped_data['youtube_video_published_date'],
+                    'youtube_video_file': scraped_data['youtube_video_file'],
+                    'youtube_video_thumbnail': scraped_data['youtube_video_thumbnail']
+                }
+
+                # Log the scraped data
+                logger.debug(f"Scraped data: {youtube_url_scrape_data}")
 
                 # Create or update the YouTubeURL instance
                 YouTubeURL.objects.update_or_create(
@@ -232,28 +253,29 @@ def youtube_url_upload(request):
                 logger.error(f"Failed to scrape YouTube URL: {e}")
                 return JsonResponse({'error': 'Failed to scrape YouTube URL.', 'details': str(e)}, status=500)
         else:
+            # Log form errors
             logger.warning(f"Form errors: {form.errors}")
             return HttpResponseBadRequest("Invalid input.")
     else:
         form = YouTubeURLForm()
-    return render(request, 'youtube_url_upload.html', {'form': form})
+    return render(request, 'url/youtube_url_add_form.html', {'form': form})
 
 
-# def youtube_url_add(request):
-#     """
-#     Function docstring describing the purpose of the function.
-#     """
-#     if request.method == 'POST':
-#         form = YouTubeURLForm(request.POST)  # Pass request.POST to the form
-#         if form.is_valid():
-#             form.save()
-#             return redirect('youtube_url_list')
-#         else:
-#             # If the form is not valid, re-render the page with the form (containing errors)
-#             return render(request, 'url/youtube_url_add_form.html', {'form': form})
-#     # This block will handle GET requests
-#     form = YouTubeURLForm()  # Instantiate a new, empty form
-#     return render(request, 'url/youtube_url_add_form.html', {'form': form})
+def youtube_url_add(request):
+    """
+    Function docstring describing the purpose of the function.
+    """
+    if request.method == 'POST':
+        form = YouTubeURLForm(request.POST)  # Pass request.POST to the form
+        if form.is_valid():
+            form.save()
+            return redirect('youtube_url_list')
+        else:
+            # If the form is not valid, re-render the page with the form (containing errors)
+            return render(request, 'url/youtube_url_add_form.html', {'form': form})
+    # This block will handle GET requests
+    form = YouTubeURLForm()  # Instantiate a new, empty form
+    return render(request, 'url/youtube_url_add_form.html', {'form': form})
 
 
 def youtube_url_detail(request, pk):

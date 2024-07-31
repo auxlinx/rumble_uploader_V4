@@ -162,7 +162,7 @@ def scrape_youtube_data(request):
                     'youtube_url_scrape_data': youtube_url_scrape_data,
                     'success_message': 'YouTube video uploaded successfully! Upload another?'
                 }
-                return render(request, 'url/youtube_url_upload.html', context)
+                return render(request, 'url/youtube_url_add.html', context)
             except Exception as e:
                 logging.error("Error rendering template: %s", e)
                 return JsonResponse({'error': 'Error rendering template'}, status=500)

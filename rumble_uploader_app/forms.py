@@ -73,4 +73,9 @@ class YouTubeURLForm(forms.ModelForm):
         """
 
         model = YouTubeURL
-        fields = '__all__'
+        fields = [
+            'youtube_video_url', 'youtube_video_title', 'youtube_video_description',
+            'youtube_video_channel', 'youtube_view_count', 'youtube_video_likes',
+            'youtube_video_published_date', 'youtube_video_upload_date', 'youtube_video_file',
+            'youtube_video_thumbnail'
+        ]

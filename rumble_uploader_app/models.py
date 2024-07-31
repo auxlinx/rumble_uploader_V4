@@ -132,6 +132,8 @@ class YouTubeURL(models.Model):
     youtube_video_likes = models.BigIntegerField(null=True)
     youtube_video_published_date = models.DateField(null=True)
     youtube_video_upload_date = models.DateTimeField(null=True)
+    youtube_video_upload_date = models.DateTimeField(null=True)
+    youtube_video_duration = models.DurationField(null=True)
     youtube_video_downloaded_successfully = models.BooleanField(default=False)
     objects = models.Manager()
 

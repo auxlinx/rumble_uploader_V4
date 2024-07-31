@@ -8,17 +8,17 @@
   {{ success_message }}
 </div>
 {% endif %}
-<form action="{% url 'youtube_url_add' %}" method="post">
+<!-- <form action="{% url 'youtube_url_add' %}" method="post">
     {% csrf_token %}
     <input type="text" name="youtube_link" placeholder="Enter YouTube link">
     <button type="submit">Add Youtube URL</button>
-</form>
+</form> -->
 
 
-<!-- <form action="{% url 'scrape_youtube' %}" method="post">
+<form action="{% url 'youtube_url_upload' %}" method="post">
     {% csrf_token %}
     <input type="text" name="youtube_link" placeholder="Enter YouTube link">
-    <button type="submit">Scrape YouTube Info</button>
-</form> -->
+    <button type="submit">Scrape YouTube URL Info</button>
+</form>
 
 {% endblock %}

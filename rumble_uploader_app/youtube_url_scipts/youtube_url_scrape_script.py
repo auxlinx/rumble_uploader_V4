@@ -15,7 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 # from rumble_uploader_app.forms import YouTubeVideoForm
 from rumble_uploader_app.youtube_url_scipts.youtube_url_download_script import download_youtube_video
-from rumble_uploader_app.models import YouTubeVideo
+from rumble_uploader_app.models import YouTubeVideo, YouTubeURL
 
     # Set up proxies
 proxies = {
@@ -23,7 +23,7 @@ proxies = {
     'https': 'http://10.10.1.10:1080',
 }
 
-def open_youtube(request):
+def scrape_youtube_data(request):
     """
     Opens the YouTube website using Selenium WebDriver.
     """
@@ -51,7 +51,7 @@ def open_youtube(request):
         driver.get(youtube_video_url)
 
         # This will hold all the data we scrape
-        data = {}
+        youtube_url_scrape_data = {}
         try:
             # Wait for the page to load
             time.sleep(5)
@@ -59,30 +59,31 @@ def open_youtube(request):
             # Extract and print the video URL
             youtube_video_url_element = driver.find_element(By.CSS_SELECTOR, "link[itemprop='url']")
             youtube_video_url = youtube_video_url_element.get_attribute("href")
-            data['youtube_video_url'] = youtube_video_url
+            youtube_url_scrape_data['youtube_video_url'] = youtube_video_url
 
             # Extract and print the interaction count
             youtube_video_title_element = driver.find_element(By.CSS_SELECTOR, "meta[itemprop='name']")
             youtube_video_title = youtube_video_title_element.get_attribute("content")
-            data['youtube_video_title'] = youtube_video_title
+            youtube_url_scrape_data['youtube_video_title'] = youtube_video_title
 
             # saved path save_path
             save_path = r'static/media/'
 
             youtube_video_path_relative_path, thumbnail_path_relative_path = download_youtube_video(youtube_video_url, save_path)
-
+            youtube_url_scrape_data['youtube_video_file'] = youtube_video_path_relative_path
+            youtube_url_scrape_data['youtube_video_thumbnail'] = thumbnail_path_relative_path
             # Use full_path and thumbnail_path as needed
             print(youtube_video_path_relative_path, thumbnail_path_relative_path)
 
             # Extract and print the upload date
             youtube_video_description_element = driver.find_element(By.CSS_SELECTOR, "meta[itemprop='description']")
             youtube_video_description = youtube_video_description_element.get_attribute("content")
-            data['youtube_video_description'] = youtube_video_description
+            youtube_url_scrape_data['youtube_video_description'] = youtube_video_description
 
             # Extract and print the author name
             youtube_video_channel_element = driver.find_element(By.CSS_SELECTOR, "span[itemprop='author'] link[itemprop='name']")
             youtube_video_channel = youtube_video_channel_element.get_attribute("content")
-            data['youtube_video_channel'] = youtube_video_channel
+            youtube_url_scrape_data['youtube_video_channel'] = youtube_video_channel
 
             # Extract and print the interaction count
             youtube_video_interaction_count_element = driver.find_element(
@@ -90,7 +91,7 @@ def open_youtube(request):
                 "meta[itemprop='interactionCount']"
             )
             youtube_view_count = youtube_video_interaction_count_element.get_attribute("content")
-            data['youtube_view_count'] = youtube_view_count
+            youtube_url_scrape_data['youtube_view_count'] = youtube_view_count
 
             # Assuming the likes are in a button with an aria-label attribute that contains the likes count
             likes_element = driver.find_element(By.XPATH, "//button[@aria-label[contains(., 'like')]]")
@@ -100,7 +101,7 @@ def open_youtube(request):
             likes_count_numeric = re.findall(r'\d+', likes_count.replace(',', ''))  # Removes commas and extracts numbers
             likes_count_numeric = int(likes_count_numeric[0]) if likes_count_numeric else 0  # Default to 0 if not found
 
-            data['youtube_video_likes'] = likes_count_numeric
+            youtube_url_scrape_data['youtube_video_likes'] = likes_count_numeric
 
             # Extract and print the upload date
             youtube_video_upload_date_element = driver.find_element(By.CSS_SELECTOR, "meta[itemprop='uploadDate']")
@@ -110,7 +111,7 @@ def open_youtube(request):
             youtube_video_upload_date_obj = datetime.strptime(youtube_video_upload_date, '%Y-%m-%dT%H:%M:%S%z')
 
             # Assign the datetime object directly
-            data['youtube_video_upload_date'] = youtube_video_upload_date_obj
+            youtube_url_scrape_data['youtube_video_upload_date'] = youtube_video_upload_date_obj
 
             # Extract and print the published date
             youtube_video_published_date_element = driver.find_element(By.CSS_SELECTOR, "meta[itemprop='datePublished']")
@@ -118,24 +119,47 @@ def open_youtube(request):
 
             # Convert the string to a datetime object
             youtube_video_published_date_obj = datetime.strptime(youtube_video_published_date, '%Y-%m-%dT%H:%M:%S%z')
+            youtube_url_scrape_data['youtube_video_published_date'] = youtube_video_published_date_obj
 
-            # Assign the datetime object directly
-            data['youtube_video_published_date'] = youtube_video_published_date_obj
-
-            data['youtube_video_file'] = youtube_video_path_relative_path
-            data['youtube_video_thumbnail'] = thumbnail_path_relative_path
-            # print(data)
-            driver.quit()  # Ensure the driver is closed in the end
+            # # Assign the datetime object directly
 
 
-         # Save paths to YouTubeVideo model
-            youtube_video = YouTubeVideo.objects.create(**data)
-            youtube_video.save()
+
+
+
+            # Assuming youtube_url_scrape_data is populated with the necessary fields
+            youtube_url_scrape_data = {
+                'youtube_video_url': youtube_url_scrape_data['youtube_video_url'],
+                'youtube_video_title': youtube_url_scrape_data['youtube_video_title'],
+                'youtube_video_description': youtube_url_scrape_data['youtube_video_description'],
+                'youtube_video_channel': youtube_url_scrape_data['youtube_video_channel'],
+                'youtube_view_count': youtube_url_scrape_data['youtube_view_count'],
+                'youtube_video_likes': youtube_url_scrape_data['youtube_video_likes'],
+                'youtube_video_published_date':  youtube_url_scrape_data['youtube_video_upload_date'],
+                'youtube_video_upload_date': youtube_url_scrape_data['youtube_video_published_date'],
+                'youtube_video_file': youtube_url_scrape_data['youtube_video_file'],
+                'youtube_video_thumbnail': youtube_url_scrape_data['youtube_video_thumbnail']
+            }
+
+            # Ensure all required fields are present
+            required_fields = [
+                'youtube_video_url', 'youtube_video_title', 'youtube_video_description',
+                'youtube_video_channel', 'youtube_view_count', 'youtube_video_likes',
+                'youtube_video_published_date', 'youtube_video_upload_date',
+                'youtube_video_file', 'youtube_video_thumbnail'
+            ]
+
+            print(youtube_url_scrape_data)
+
+            for field in required_fields:
+                if field not in youtube_url_scrape_data or not youtube_url_scrape_data[field]:
+                    return JsonResponse({'error': f'{field} is required.'}, status=400)
+
             # Assuming you have a template to show success
             try:
                 # Include a success message in the context
                 context = {
-                    'data': data,
+                    'youtube_url_scrape_data': youtube_url_scrape_data,
                     'success_message': 'YouTube video uploaded successfully! Upload another?'
                 }
                 return render(request, 'url/youtube_url_upload.html', context)
@@ -150,3 +174,5 @@ def open_youtube(request):
             # If an error occurs, close the driver and return an error message
             driver.quit()
             return JsonResponse({'error': str(e)}, status=500)
+
+    return youtube_url_scrape_data

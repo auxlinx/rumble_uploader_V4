@@ -21,7 +21,7 @@ from .forms import RumbleVideoForm, YouTubeVideoForm, YouTubeURLForm
 from .models import RumbleVideo, YouTubeVideo, YouTubeURL
 from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
 from rumble_uploader_app.youtube_url_scipts.youtube_url_download_script import download_youtube_video
-from rumble_uploader_app.youtube_url_scipts.youtube_url_scrape_script import open_youtube
+from rumble_uploader_app.youtube_url_scipts.youtube_url_scrape_script import scrape_youtube_data
 # from rumble_uploader_app.youtube_to_rumble_script.youtube_to_rumble_converter import convert_youtube_video_to_rumble
 from rumble_uploader_app.rumble_uploader_script.rumble_uploader import upload_to_rumble
 
@@ -68,9 +68,6 @@ def home(request):
     return render(request, 'home.html', {'current_datetime': current_datetime})
 
 # display Ip address
-
-
-
 def display_ip_address(request):
     """
     Function docstring describing the purpose of the function.
@@ -207,37 +204,56 @@ def youtube_url_upload(request):
     if request.method == 'POST':
         form = YouTubeURLForm(request.POST)
         if form.is_valid():
-            youtube_url = form.cleaned_data.get('youtube_url')
-            # Get the directory of the current script
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            # Construct the relative path to the 'static' directory
-            save_path = os.path.join(current_dir, 'static')
-            download_success = download_youtube_video(youtube_url, save_path)
-            if download_success:
-                form.save()
-                return redirect('youtube_url_upload')
-            else:
-                form.add_error(None, "Failed to download video.")
+            youtube_video_url = form.cleaned_data['youtube_video_url']
+            try:
+                # Call the scraping function
+                scraped_data = scrape_youtube_data(youtube_video_url)
+
+                # Adjust keys to match form fields
+                youtube_url_scrape_data = {
+                'youtube_video_url': scraped_data['youtube_video_url'],
+                'youtube_video_title': scraped_data['youtube_video_title'],
+                'youtube_video_description': scraped_data['youtube_video_description'],
+                'youtube_video_channel': scraped_data['youtube_video_channel'],
+                'youtube_view_count': scraped_data['youtube_view_count'],
+                'youtube_video_likes': scraped_data['youtube_video_likes'],
+                'youtube_video_published_date':  scraped_data['youtube_video_upload_date'],
+                'youtube_video_upload_date': scraped_data['youtube_video_published_date'],
+                'youtube_video_file': scraped_data['youtube_video_file'],
+                'youtube_video_thumbnail': scraped_data['youtube_video_thumbnail']
+            }
+
+                # Create or update the YouTubeURL instance
+                YouTubeURL.objects.update_or_create(
+                    youtube_video_url=youtube_video_url,
+                    defaults=youtube_url_scrape_data,
+                )
+            except Exception as e:
+                logger.error(f"Failed to scrape YouTube URL: {e}")
+                return JsonResponse({'error': 'Failed to scrape YouTube URL.', 'details': str(e)}, status=500)
+        else:
+            logger.warning(f"Form errors: {form.errors}")
+            return HttpResponseBadRequest("Invalid input.")
     else:
         form = YouTubeURLForm()
-    return render(request, 'url/youtube_url_upload.html', {'form': form})
+    return render(request, 'youtube_url_upload.html', {'form': form})
 
 
-def youtube_url_add(request):
-    """
-    Function docstring describing the purpose of the function.
-    """
-    if request.method == 'POST':
-        form = YouTubeURLForm(request.POST)  # Pass request.POST to the form
-        if form.is_valid():
-            form.save()
-            return redirect('youtube_url_list')
-        else:
-            # If the form is not valid, re-render the page with the form (containing errors)
-            return render(request, 'url/youtube_url_add_form.html', {'form': form})
-    # This block will handle GET requests
-    form = YouTubeURLForm()  # Instantiate a new, empty form
-    return render(request, 'url/youtube_url_add_form.html', {'form': form})
+# def youtube_url_add(request):
+#     """
+#     Function docstring describing the purpose of the function.
+#     """
+#     if request.method == 'POST':
+#         form = YouTubeURLForm(request.POST)  # Pass request.POST to the form
+#         if form.is_valid():
+#             form.save()
+#             return redirect('youtube_url_list')
+#         else:
+#             # If the form is not valid, re-render the page with the form (containing errors)
+#             return render(request, 'url/youtube_url_add_form.html', {'form': form})
+#     # This block will handle GET requests
+#     form = YouTubeURLForm()  # Instantiate a new, empty form
+#     return render(request, 'url/youtube_url_add_form.html', {'form': form})
 
 
 def youtube_url_detail(request, pk):
@@ -380,27 +396,3 @@ def upload_all_videos_to_rumble(request):
                 rumble_video.uploaded_to_rumble_success = True
                 rumble_video.save()
         return HttpResponseRedirect(reverse('rumble_video_list'))
-
-
-@require_http_methods(["POST"])
-def scrape_youtube(request):
-    """
-    Scrape YouTube information, save it to the database, and return the data as a JSON response.
-    """
-    form = YouTubeVideoForm(request.POST, request.FILES)
-    if form.is_valid():
-        query = form.cleaned_data['query']
-        try:
-            data = open_youtube(query)  # Assume this returns        static_file_path = r'/static/media/videos/%(title)s.%(ext)s'  # Change this to your desired pathary with keys matching YouTubeVideo model fields
-            video, created = YouTubeVideo.objects.update_or_create(
-                query=query,
-                defaults=data,
-            )
-            # Optionally, convert the video instance to a dictionary to return as JSON
-            video_data = YouTubeVideoForm(video)
-            return JsonResponse(video_data)
-        except NoSuchElementException as e:  # Corrected exception
-            # Log the error here if needed
-            return JsonResponse({'error': 'Failed to scrape YouTube.', 'details': str(e)}, status=500)
-    else:
-        return HttpResponseBadRequest("Invalid input.")

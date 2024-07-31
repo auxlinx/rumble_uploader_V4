@@ -73,4 +73,4 @@ class YouTubeURLForm(forms.ModelForm):
         """
 
         model = YouTubeURL
-        fields = ['youtube_video_url']
+        fields = '__all__'

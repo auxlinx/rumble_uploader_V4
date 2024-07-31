@@ -1,6 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 
 
     {% if messages %}
@@ -15,15 +23,27 @@
         <table id="youtubeUrlTable" class="VideoTableDark" >
             <thead>
                 <tr>
-                    <th>YT URL</th>
-                    <th>YouTube Video Download Success</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>YT Video URL</th>
+                    <th>Channel</th>
+                    <th>View Count</th>
+                    <th>Posted Date</th>
+                    <th>Upload Date</th>
+                    <th>Delete</th>
+                    <th>Update</th>
                 </tr>
             </thead>
             <tbody>
                 {% for youtube_url in youtube_urls %}
                     <tr>
-                        <td>{{ youtube_url.youtube_video_url }}</td>
-                        <td>{{ youtube_url.youtube_video_downloaded_successfully }}</td>
+                        <td style="word-wrap: break-word;"><a href="{% url 'youtube_url_detail' youtube_url.pk %}">{{ youtube_url.youtube_video_title }}</a></td>
+                         <td style="word-wrap: break-word;">{{ youtube_url.youtube_video_description }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_url.youtube_video_url }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_url.youtube_video_channel }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_url.youtube_view_count }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_url.youtube_video_published_date }}</td>
+                         <td style="word-wrap: break-word;">{{ youtube_url.youtube_video_upload_date }}</td>
                         <td>
                             <form method="POST" action="{% url 'youtube_url_delete' youtube_url.pk %}">
                                 {% csrf_token %}
@@ -48,15 +68,7 @@
             </tbody>
         </table>
     </div>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
-    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
 
     <script>
         $(document).ready(function() {

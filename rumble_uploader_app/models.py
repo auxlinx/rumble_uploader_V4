@@ -97,7 +97,7 @@ class RumbleVideo(models.Model):
 
 class YouTubeVideo(models.Model):
     youtube_video_url = models.URLField(max_length=200, null=True)
-    youtube_video_title = models.CharField(max_length=200)
+    youtube_video_title = models.CharField(max_length=200, null=True)
     youtube_video_description = models.TextField(null=True)
     youtube_video_channel = models.TextField(null=True)
     youtube_view_count = models.BigIntegerField(null=True)
@@ -125,6 +125,13 @@ class YouTubeURL(models.Model):
     Represents a YouTube URL.
     """
     youtube_video_url = models.URLField(max_length=200, null=True)
+    youtube_video_title = models.CharField(max_length=200, default='Default Title')
+    youtube_video_description = models.TextField(null=True)
+    youtube_video_channel = models.TextField(null=True)
+    youtube_view_count = models.BigIntegerField(null=True)
+    youtube_video_likes = models.BigIntegerField(null=True)
+    youtube_video_published_date = models.DateField(null=True)
+    youtube_video_upload_date = models.DateTimeField(null=True)
     youtube_video_downloaded_successfully = models.BooleanField(default=False)
     objects = models.Manager()
 

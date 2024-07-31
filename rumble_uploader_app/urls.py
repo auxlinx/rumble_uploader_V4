@@ -22,7 +22,7 @@ from rumble_uploader_app.views import ( home,
     convert_video,
     # Urls for youtube urls
     youtube_url_upload,
-    youtube_url_add,
+    # youtube_url_add,
     youtube_url_detail,
     youtube_url_list,
     youtube_url_delete,
@@ -33,7 +33,6 @@ from rumble_uploader_app.views import ( home,
     # Scripts
     run_rumble_script,
     upload_all_videos_to_rumble,
-    scrape_youtube,
     )
 
 urlpatterns = [
@@ -59,7 +58,7 @@ urlpatterns = [
     path('youtube_to_rumble_conversion/', youtube_to_rumble_conversion_list, name='youtube_to_rumble_conversion_list'),
     # youtube video urls
     path('youtube_upload_video/', youtube_upload_video, name='youtube_upload_video'),
-    path('youtube_url_add/', youtube_url_add, name='youtube_url_add'),
+    # path('youtube_url_add/', youtube_url_add, name='youtube_url_add'),
     path('youtube_video_list/', youtube_video_list, name='youtube_video_list'),
     path('youtube_video/<int:pk>/', youtube_video_detail, name='youtube_video_detail'),
     path('youtube_video/<int:pk>/delete/', youtube_video_delete, name='youtube_video_delete'),
@@ -67,7 +66,6 @@ urlpatterns = [
     path('convert-video/<int:youtube_video_pk>', convert_video, name='convert_video'),
     # script running url
     path('run_rumble_script/<int:pk>/', run_rumble_script, name='run_rumble_script'),
-    path('scrape_youtube/', scrape_youtube, name='scrape_youtube'),
     path('upload-videos/', upload_all_videos_to_rumble, name='upload_videos'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

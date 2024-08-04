@@ -554,37 +554,25 @@ def upload_to_rumble(rumble_video_script_serialized_data):
 
     time.sleep(short_wait_time)
 
-    class UploadFileException(Exception):
-        pass
+    try:
+        file_input = WebDriverWait(driver, 3).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]')))
+        file_input.send_keys(rumble_video_file_upload)
+        print(rumble_video_file_upload)
+        time.sleep(random_wait_time)
 
-    def upload_file(driver, rumble_video_file_upload, short_wait_time):
-        max_attempts = 3  # Number of retries
-        attempts = 0
+    except Exception as e:
+        print("Unable to upload file:", str(e))
+        retry_limit = 3  # Number of retries
+        retry_count = 0
+        print(f"Attempt {retry_count + 1} failed with error: {str(e)}")
 
-        while attempts < max_attempts:
-            try:
-                file_input = WebDriverWait(driver, short_wait_time).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]')))
-                file_input.send_keys(rumble_video_file_upload)
-                print(f"File {rumble_video_file_upload} uploaded successfully.")
-                return True
-
-            except NoSuchElementException as e:
-                print(f"Attempt {attempts + 1} failed: File input element not found. Error: {str(e)}")
-            except TimeoutException as e:
-                print(f"Attempt {attempts + 1} failed: Timed out waiting for file input element. Error: {str(e)}")
-            except WebDriverException as e:
-                print(f"Attempt {attempts + 1} failed: WebDriver error occurred. Error: {str(e)}")
-            except Exception as e:
-                print(f"Attempt {attempts + 1} failed: An unexpected error occurred. Error: {str(e)}")
-
-            attempts += 1
-
-            if attempts >= max_attempts:
-                raise UploadFileException("Maximum retry attempts reached. Unable to upload file.")
-            else:
-                time.sleep(short_wait_time)  # Wait before retrying
-
-    upload_file(driver, rumble_video_file_upload, short_wait_time)
+        retry_count += 1
+        if retry_count >= retry_limit:
+            print("Maximum retry attempts reached. Unable to upload file.")
+            # Handle maximum retry failure case here
+            sys.exit(1)  # Exit the script with an error status
+        else:
+            time.sleep(5)  # Wait before retrying
 
     # Input Rumble video data
     # Input Rumble video video_title

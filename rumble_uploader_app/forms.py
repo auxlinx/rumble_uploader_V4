@@ -26,6 +26,12 @@ VISIBILITY_CHOICES = [
         ('scheduled', 'Scheduled'),
     ]
 
+RUMBLE_ACCOUNT_CHOICES = [
+    ("randomrumblevideos", "randomrumblevideos"),
+    ("rumblearchives", "rumblearchives"),
+    ("therumblewarfootage", "therumblewarfootage"),
+]
+
 class RumbleVideoForm(forms.ModelForm):
     """
     Form for Rumble Video.
@@ -36,6 +42,7 @@ class RumbleVideoForm(forms.ModelForm):
 
     rumble_primary_category = forms.ChoiceField(choices=PRIMARY_CATEGORY_CHOICES)
     rumble_visibility = forms.ChoiceField(choices=VISIBILITY_CHOICES)
+    rumble_licensing_options = forms.ChoiceField(choices=RUMBLE_ACCOUNT_CHOICES)
 
     class Meta:
         model = RumbleVideo

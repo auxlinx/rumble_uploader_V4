@@ -37,3 +37,10 @@ rumble_video_visibility = [
 "Public",
 "Unlisted",
 ]
+
+
+rumble_video_management = [
+        "Rumble Video Management Exclusive",
+        "Rumble Video Management Non Exclusive",
+        "Rumble Video Management Rumble Only",
+    ]

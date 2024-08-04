@@ -1,11 +1,9 @@
 """
 This module is responsible for running the rumble uploader test.
 """
+from rumble_uploader_app.Tests.rumble_uploader_test import upload_to_rumble
 
-import sys
-from rumble_uploader_test import upload_to_rumble
-
-sys.path.append(r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\rumble_uploader_app\Tests')
+# sys.path.append(r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\rumble_uploader_app')
 
 test_rumble_video_script_data = ({
             "rumble_account": "rumblevideos",

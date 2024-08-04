@@ -30,38 +30,99 @@ short_wait_time = random.uniform(1, 2)
 
 # Rumble element selectors
 rumble_sign_in_button = 'body > header > div > div > button.header-user.round-button.btn-grey'
+
+#
 rumble_username_field_input = '#login-username'
+rumble_username_field_input_js = 'document.querySelector("#login-username")'
+#
 rumble_password_field_input = '#login-password'
+rumble_password_field_input_js = 'document.querySelector("#login-password")'
+#
 rumble_login_button = '#loginForm > button.login-button.login-form-button.round-button.bg-green'
+rumble_login_button_js = 'document.querySelector("#loginForm > button.login-button.login-form-button.round-button.bg-green")'
+#
 rumble_green_upload_button = 'button.header-upload'
+#
 rumble_upload_video_button = 'div.hover-menu.header-upload-menu.pop-show a.header-user-menu__menu-item[href="/upload.php"]'   #body > header > div > div > div.hover-menu.header-upload-menu.pop-show > a:nth-child(1)
+#
 rumble_upload_file = "input[type='file']"
+#
 rumble_video_title_input = '#title'
+rumble_video_title_input_js = 'document.querySelector("#title")'
+#
 rumble_video_description_input = '#description'
+rumble_video_description_input_js = 'document.querySelector("#description")'
+#
 rumble_video_categories_input = '#form > div > div.video-details.form-wrap > div.form-wrap > div:nth-child(1) > div > input.select-search-input'
+rumble_video_categories_input_js= 'document.querySelector("#form > div > div.video-details.form-wrap > div.form-wrap > div:nth-child(1) > div > input.select-search-input")'
+#
 rumble_video_secondary_categories_input = '#form > div > div.video-details.form-wrap > div.form-wrap > div:nth-child(2) > div > input.select-search-input'
+rumble_video_secondary_categories_input_js = 'document.querySelector("#form > div > div.video-details.form-wrap > div.form-wrap > div:nth-child(2) > div > input.select-search-input")'
+#
 rumble_video_tag_input = '#tags'
+rumble_video_tag_input_js = 'document.querySelector("#tags")'
+#
 visibility_option_selector_public = "visibility-options > div:nth-child(1) > label"
+visibility_option_selector_public_js = 'document.querySelector("#visibility-options > div:nth-child(1) > label")'
+#
 visibility_option_selector_unlisted = "visibility-options > div:nth-child(2) > label"
+visibility_option_selector_unlisted_js = 'document.querySelector("#visibility-options > div:nth-child(2) > label")'
+#
 visibility_option_selector_private = "#visibility-options > div:nth-child(3) > label"
+visibility_option_selector_private_js = 'document.querySelector("#visibility-options > div:nth-child(3) > label")'
+#
 rumble_upload_button = 'submitForm'
-rumble_visibility_radio_button = '#visibility_public'
-rumble_only_button = '#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(4) > div > a'
-rumble_terms_and_conditions1 = '#crights'
-rumble_terms_and_conditions2 = '#cterms'
+rumble_upload_button_js = 'document.querySelector("#submitForm")'
+#
+rumble_video_management_button_exclusive_selector = '#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(2) > div > a'
+rumble_video_management_button_exclusive_selector_js = 'document.querySelector("#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(2) > div > a")'
+#
+rumble_video_management_button_non_exclusive_selector = '#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(3) > div > a'
+rumble_video_management_button_non_exclusive_selector_js = 'document.querySelector("#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(3) > div > a")'
+#
+rumble_video_management_button_rumble_only_selector = '#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(4) > div > a'
+rumble_video_management_button_rumble_only_selector_js = 'document.querySelector("#form2 > div > div.video-more.form-wrap.licensingOptions.quarters-wrap > div:nth-child(4) > div > a")'
+#
+rumble_terms_and_conditions1 = '#form2 > div > div.video-more.form-wrap.terms-options > div:nth-child(2) > label'    #'#crights'
+rumble_terms_and_conditions1_js = 'document.querySelector("#form2 > div > div.video-more.form-wrap.terms-options > div:nth-child(2) > label")'
+#
+rumble_terms_and_conditions2 = '#form2 > div > div.video-more.form-wrap.terms-options > div:nth-child(3) > label'
+rumble_terms_and_conditions2_js = 'document.querySelector("#form2 > div > div.video-more.form-wrap.terms-options > div:nth-child(3) > label")'
+#
 rumble_submit_button = 'submitForm2'
+rumble_submit_button_js = 'document.querySelector("#submitForm2")'
+#
 rumble_direct_link = "direct"
+rumble_direct_link_js = 'document.querySelector("#direct")'
+#
 rumble_embed_code = 'embed'
+rumble_direct_link_js = 'document.querySelector("#embed")'
+#
 rumble_monetized_embed_code = 'monetized'
+rumble_monetized_embed_code_js = 'document.querySelector("#monetized")'
+#
 rumble_video_uploader_progress_selector = "#form2 > div > div.video-more.form-wrap.progress-wrap > div > div > span.top_percent"
+rumble_video_uploader_progress_selector_js = 'document.querySelector("#form2 > div > div.video-more.form-wrap.progress-wrap > div > div > span.top_percent")'
+
 
 def safe_send_keys(driver, html_element, locator, keys):
+    """
+    Safely sends keys to an element identified by the given locator.
+
+    :param driver: The Selenium WebDriver instance.
+    :param html_element: The HTML element type (e.g., By.ID, By.CLASS_NAME).
+    :param locator: The locator of the element.
+    :param keys: The keys to be sent to the element.
+    :return: True if the keys are successfully sent, False otherwise.
+    """
     attempts = 0
-    timeout=10
-    retries=3
-    screenshot_name=None
+    timeout = 10
+    retries = 3
+    max_attempts = 3
+    screenshot_name = None
     while attempts < retries:
         try:
+            # Locate the element first
             element = WebDriverWait(driver, timeout).until(
                 EC.element_to_be_clickable((html_element, locator))
             )
@@ -71,19 +132,27 @@ def safe_send_keys(driver, html_element, locator, keys):
                 time.sleep(short_wait_time)
             logging.info("Successfully sent keys to element: %s", locator)
             return True
+
         except ElementNotInteractableException:
             logging.error("Element not interactable at the moment.")
             driver.get_screenshot_as_file(screenshot_name)
+            attempts += 1
         except NoSuchElementException:
+            driver.get_screenshot_as_file(screenshot_name)
+            attempts += 1
             return False
         except TimeoutException:
             logging.error("Timeout waiting for element to be clickable. Selector: %s", locator)
             if screenshot_name is None:
                 screenshot_name = f"{locator.replace('>', '_').replace(' ', '')}_debug_screenshot.png"
-            driver.get_screenshot_as_file(screenshot_name)
-        attempts += 1
+                driver.get_screenshot_as_file(screenshot_name)
+                attempts += 1
         logging.info("Retry %s/%s for selector: %s", attempts, retries, locator)
-    logging.error("Failed to add keys after %s retries. Selector: %s", retries, locator)
+        logging.error("Failed to add keys after %s retries. Selector: %s", retries, locator)
+        if attempts >= max_attempts:
+            print("Max attempts reached, exiting script.")
+            sys.exit(1)  # Exit the script with an error status
+    return False
 
 
 def safe_click(driver, html_element, locator):
@@ -99,12 +168,13 @@ def safe_click(driver, html_element, locator):
     screenshot_name = None
     while attempts < max_attempts:
         try:
+            # Locate the element first
             element = WebDriverWait(driver, timeout).until(
-                EC.element_to_be_clickable((html_element, locator))
-            )
+                EC.element_to_be_clickable((html_element, locator)))
             element.click()
             logging.info("Successfully clicked on the element with selector: %s", locator)
             time.sleep(short_wait_time)
+            return True  # Return True if the click is successful
         except (ElementClickInterceptedException, NoSuchElementException, TimeoutException, WebDriverException) as e:
             error_message = str(e)
             logging.error("Error encountered: %s. Selector: %s", error_message, locator)
@@ -114,8 +184,19 @@ def safe_click(driver, html_element, locator):
                     locator_str = "_".join(str(item) for item in locator).replace('>', '_').replace(' ', '')
                 else:
                     locator_str = str(locator).replace('>', '_').replace(' ', '')
-                screenshot_name = f"{locator_str}_debug_screenshot.png"
-            driver.get_screenshot_as_file(screenshot_name)
+                    screenshot_name = f"{locator_str}_debug_screenshot.png"
+                    driver.get_screenshot_as_file(screenshot_name)
+            # Attempt to click using JavaScript
+            try:
+                element = driver.execute_script(f'return document.querySelector("{locator}");')
+                driver.execute_script("arguments[0].click();", element)
+                logging.info(
+                    "Successfully clicked on the element with JavaScript. Selector: %s", locator
+                )
+                return True  # Return True if the JavaScript click is successful
+            except WebDriverException as js_e:
+                logging.error("JavaScript click failed: %s. Selector: %s", str(js_e), locator)
+            attempts += 1
             if isinstance(e, (NoSuchElementException, TimeoutException)):
                 attempts += 1
                 logging.info("Retry %s/%s for selector: %s", attempts, max_attempts, locator)
@@ -134,14 +215,6 @@ def format_tags(tags):
     :return: A formatted string with each tag prefixed by '#'.
     """
     return [tag.strip() for tag in tags.split(',')]
-    # # Split the input string by commas
-    # tags_list = str(tags.split(','))
-
-    # # Trim whitespace and add '#' prefix to each tag
-    # formatted_tags = [f"#{tag.strip()}" for tag in tags_list]
-
-    # # Join the formatted tags back into a single string
-    # return ', '.join(formatted_tags)
 
 def safe_tags(driver, html_element, locator, tags):
     """
@@ -155,11 +228,12 @@ def safe_tags(driver, html_element, locator, tags):
     """
     attempts = 0
     timeout = 10
-    retries = 3
+    max_attempts = 3
     screenshot_name = None
     formatted_tags = format_tags(tags)
-    while attempts < retries:
+    while attempts < max_attempts:
         try:
+            # Locate the element first
             element = WebDriverWait(driver, timeout).until(
                 EC.element_to_be_clickable((html_element, locator))
             )
@@ -173,37 +247,22 @@ def safe_tags(driver, html_element, locator, tags):
         except ElementNotInteractableException:
             logging.error("Element not interactive at the moment.")
             driver.get_screenshot_as_file(screenshot_name)
+            attempts += 1
         except NoSuchElementException:
+            attempts += 1
             return False
         except TimeoutException:
             logging.error("Timeout waiting for element to be clickable. Selector: %s", locator)
             if screenshot_name is None:
                 screenshot_name = f"{locator.replace('>', '_').replace(' ', '')}_debug_screenshot.png"
-            driver.get_screenshot_as_file(screenshot_name)
-        attempts += 1
-        logging.info("Retry %s/%s for selector: %s", attempts, retries, locator)
-    logging.error("Failed to add tags after %s retries. Selector: %s", retries, locator)
-
-# def wait_for_upload_completion(driver, html_element, locator):
-#     """
-#     Waits until the upload progress reaches 100%.
-
-#     Args:
-#         driver (WebDriver): The Selenium WebDriver instance.
-#         timeout (int): Maximum time to wait in seconds. Default is 300 seconds.
-#     """
-#     timeout=300
-#     try:
-#         WebDriverWait(driver, timeout).until(
-#             EC.text_to_be_present_in_element(
-#                 (html_element, locator), "100%"
-#             )
-#         )
-#         print("Upload completed successfully.")
-#     except TimeoutException:
-#         print("Timeout waiting for upload to complete.")
-#         driver.get_screenshot_as_file("upload_timeout_screenshot.png")
-#         raise
+                driver.get_screenshot_as_file(screenshot_name)
+                attempts += 1
+        logging.info("Retry %s/%s for selector: %s", attempts, max_attempts, locator)
+        logging.error("Failed to add tags after %s max_attempts. Selector: %s", max_attempts, locator)
+        if attempts >= max_attempts:
+            print("Max attempts reached, exiting script.")
+            sys.exit(1)  # Exit the script with an error status
+    return False
 
 def safe_click_javascript(driver, html_element, locator):
     """
@@ -251,11 +310,13 @@ def safe_click_javascript(driver, html_element, locator):
                 else:
                     locator_str = str(locator).replace('>', '_').replace(' ', '')
                 screenshot_name = f"{locator_str}_debug_screenshot.png"
+                attempts += 1
             driver.get_screenshot_as_file(screenshot_name)
             if isinstance(e, (NoSuchElementException, TimeoutException)):
                 attempts += 1
                 logging.info("Retry %s/%s for selector: %s", attempts, max_attempts, locator)
                 continue
+                attempts += 1
         logging.error("Failed to click after %s max_attempts. Selector: %s", max_attempts, locator)
         if attempts >= max_attempts:
             print("Max attempts reached, exiting script.")
@@ -286,6 +347,7 @@ def copy_rumble_video_links(driver, html_element, locator, returned_data):
                 else:
                     locator_str = str(locator).replace('>', '_').replace(' ', '')
                 screenshot_name = f"{locator_str}_debug_screenshot.png"
+                attempts += 1
             driver.get_screenshot_as_file(screenshot_name)
             if isinstance(e, (NoSuchElementException, TimeoutException)):
                 attempts += 1
@@ -296,6 +358,7 @@ def copy_rumble_video_links(driver, html_element, locator, returned_data):
             print("Max attempts reached, exiting script.")
             sys.exit(1)  # Exit the script with an error status
     return False
+
 
 def upload_to_rumble(rumble_video_script_serialized_data):
     """
@@ -331,7 +394,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     # Initialize the driver
-    driver.get("https://rumble.com/")
+    driver.get("https://rumble.com/upload.php")
 
     time.sleep(short_wait_time)  # Wait for 10 seconds
 
@@ -362,18 +425,20 @@ def upload_to_rumble(rumble_video_script_serialized_data):
 
     print(rumble_username)
     print(rumble_password)
+
     # Sign in to Rumble account
+
     # Click sign up button
-    safe_click(driver, By.CSS_SELECTOR, rumble_sign_in_button)
+    # safe_click(driver, By.CSS_SELECTOR, rumble_sign_in_button)
 
     # Input username and password
     safe_send_keys(driver, By.CSS_SELECTOR, rumble_username_field_input, rumble_username)
     safe_send_keys(driver, By.CSS_SELECTOR, rumble_password_field_input, rumble_password)
     safe_click(driver, By.CSS_SELECTOR, rumble_login_button)
 
-    # beginning of the upload process
-    safe_click(driver, By.CSS_SELECTOR, rumble_green_upload_button)
-    safe_click(driver, By.CSS_SELECTOR, rumble_upload_video_button)
+    # # beginning of the upload process
+    # safe_click(driver, By.CSS_SELECTOR, rumble_green_upload_button)
+    # safe_click(driver, By.CSS_SELECTOR, rumble_upload_video_button)
 
     #  Upload the video file
     rumble_video_pk = rumble_video_data["rumble_video_pk"]
@@ -384,7 +449,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     video_secondary_category = rumble_video_data["videoSecondCategory"]
     rumble_video_file = rumble_video_data["rumble_video_file"]
     rumble_video_visibility_setting = rumble_video_data["rumble_video_visibility"]
-    print(rumble_video_visibility_setting)
+    rumble_video_licensing_setting = rumble_video_data["rumble_video_licensing_options"]
 
     # Rumble video visibility settings
     def rumble_visibility(visibility_setting):
@@ -398,8 +463,24 @@ def upload_to_rumble(rumble_video_script_serialized_data):
             video_visibility_option_selection = visibility_option_selector_unlisted
         return video_visibility_option_selection
 
+
     # Now call the function with the correct argument
     visibility_option = rumble_visibility(rumble_video_visibility_setting)
+
+    # Rumble video visibility settings
+    def rumble_licensing_options(licensing_options):
+        rumble_licensing_options_selection = None
+
+        if licensing_options == "Rumble Video Management Exclusive":
+            rumble_licensing_options_selection= rumble_video_management_button_exclusive_selector
+        elif licensing_options == "Rumble Video Management Non Exclusive":
+            rumble_licensing_options_selection= rumble_video_management_button_non_exclusive_selector
+        elif licensing_options == "Rumble Video Management Rumble Only":
+            rumble_licensing_options_selection= rumble_video_management_button_rumble_only_selector
+        return rumble_licensing_options_selection
+
+    # Now call the function with the correct argument
+    licensing_option = rumble_licensing_options(rumble_video_licensing_setting)
 
     # Define the file path where the video is stored
     file_path = '/code/static/media/videos'
@@ -472,24 +553,37 @@ def upload_to_rumble(rumble_video_script_serialized_data):
 
     time.sleep(short_wait_time)
 
-    try:
-        file_input = WebDriverWait(driver, short_wait_time).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]')))
-        file_input.send_keys(rumble_video_file_upload)
-        print(rumble_video_file_upload)
-        time.sleep(short_wait_time)
+    class UploadFileException(Exception):
+        pass
 
-    except Exception as e:
-        print("Unable to upload file:", str(e))
-        retry_limit = 3  # Number of retries
-        retry_count = 0
-        print(f"Attempt {retry_count + 1} failed with error: {str(e)}")
+    def upload_file(driver, file_path, short_wait_time):
+        max_attempts = 3  # Number of retries
+        attempts = 0
 
-        retry_count += 1
-        if retry_count >= retry_limit:
-            print("Maximum retry attempts reached. Unable to upload file.")
-            # Handle maximum retry failure case here
-        else:
-            time.sleep(short_wait_time)  # Wait before retrying
+        while attempts < max_attempts:
+            try:
+                file_input = WebDriverWait(driver, short_wait_time).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]')))
+                file_input.send_keys(file_path)
+                print(f"File {file_path} uploaded successfully.")
+                return True
+
+            except NoSuchElementException as e:
+                print(f"Attempt {attempts + 1} failed: File input element not found. Error: {str(e)}")
+            except TimeoutException as e:
+                print(f"Attempt {attempts + 1} failed: Timed out waiting for file input element. Error: {str(e)}")
+            except WebDriverException as e:
+                print(f"Attempt {attempts + 1} failed: WebDriver error occurred. Error: {str(e)}")
+            except Exception as e:
+                print(f"Attempt {attempts + 1} failed: An unexpected error occurred. Error: {str(e)}")
+
+            attempts += 1
+
+            if attempts >= max_attempts:
+                raise UploadFileException("Maximum retry attempts reached. Unable to upload file.")
+            else:
+                time.sleep(short_wait_time)  # Wait before retrying
+
+    upload_file(driver, rumble_video_file_upload, short_wait_time)
 
     # Input Rumble video data
     # Input Rumble video video_title
@@ -503,12 +597,11 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     # Input Rumble video video_tags
     safe_tags(driver, By.CSS_SELECTOR, rumble_video_tag_input, video_tags)
     # Select Rumble video visibility setting
-    print(visibility_option)
     safe_click(driver, By.CSS_SELECTOR, visibility_option)
     # Click the upload button
     safe_click_javascript(driver, By.ID, rumble_upload_button)
     # Click the rumble only button
-    safe_click(driver, By.CSS_SELECTOR, rumble_only_button)
+    safe_click(driver, By.CSS_SELECTOR, licensing_option)
     #  Accept the terms and conditions 1
     safe_click(driver, By.CSS_SELECTOR, rumble_terms_and_conditions1)
     #  Accept the terms and conditions 2
@@ -516,7 +609,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     #  Click sumbit upload button
     safe_click_javascript(driver, By.ID, rumble_submit_button)
 
-    time.sleep(10)
+    time.sleep(3)
 
     # Initialize variables before try blocks to ensure they have default values
     rumble_direct_link_copied_text = None
@@ -526,29 +619,13 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     copy_rumble_video_links(driver, By.ID, rumble_direct_link, rumble_direct_link_copied_text)
     print(rumble_direct_link_copied_text)
 
-    # try:
-    #     copy_rumble_direct_link = WebDriverWait(driver, short_wait_time).until(EC.element_to_be_clickable((By.ID, rumble_direct_link)))
-    #     rumble_direct_link_copied_text = copy_rumble_direct_link.get_attribute("value")
-    # except Exception as e:
-    #     print(f"An error occurred: {e}")
-
     copy_rumble_video_links(driver, By.ID, rumble_embed_code, rumble_embed_code_copied_text)
     print(rumble_embed_code_copied_text)
-
-    # try:
-    #     copy_rumble_embed_code = WebDriverWait(driver, short_wait_time).until(EC.element_to_be_clickable((By.ID, rumble_embed_code)))
-    #     rumble_embed_code_copied_text = copy_rumble_embed_code.get_attribute("value")
-    # except Exception as e:
-    #     print(f"An error occurred: {e}")
 
     copy_rumble_video_links(driver, By.ID, rumble_monetized_embed_code, rumble_monetized_embed_copied_text)
     print(rumble_monetized_embed_copied_text)
 
-    # try:
-    #     copy_rumble_monetized_embed_code = WebDriverWait(driver, short_wait_time).until(EC.element_to_be_clickable((By.ID, rumble_monetized_embed_code)))
-    #     rumble_monetized_embed_copied_text = copy_rumble_monetized_embed_code.get_attribute("value")
-    # except Exception as e:
-    #     print(f"An error occurred: {e}")
+    time.sleep(short_wait_time)
 
     rumble_video_links_return_data = {
         "rumble_video_direct_link": rumble_direct_link_copied_text,
@@ -597,5 +674,3 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     except Exception as e:
         # Handle any exceptions, possibly logging them
         return f"An error occurred: {str(e)}"
-    # sys.exit(10)
-    # Profile the upload_to_rumble function

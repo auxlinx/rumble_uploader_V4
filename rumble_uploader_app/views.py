@@ -19,7 +19,7 @@ from pytube import YouTube
 from pytube.exceptions import PytubeError
 from django.http import Http404, JsonResponse, HttpResponseRedirect,FileResponse, HttpResponseBadRequest,HttpResponse, HttpResponseNotFound
 from django.views.decorators.http import require_http_methods
-from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility
+from rumble_uploader_app.templates.rumble_videos.rumble_video_options import rumble_video_primary_categories, rumble_accounts, rumble_video_secondary_categories, rumble_video_visibility, rumble_video_management
 import logging
 from rest_framework import status
 from rest_framework.response import Response
@@ -119,6 +119,7 @@ def youtube_to_rumble_conversion_list(request):
     context = {'rumble_video_primary_categories': rumble_video_primary_categories,
                'rumble_video_secondary_categories': rumble_video_secondary_categories,
                "rumble_video_visibility": rumble_video_visibility,
+               "rumble_video_management": rumble_video_management,
                'rumble_accounts': rumble_accounts,
                'rumble_videos': RumbleVideo.objects.all(),
                'youtube_videos': YouTubeVideo.objects.all()}
@@ -145,6 +146,7 @@ def convert_video(request, youtube_video_pk):
         input_rumble_account = request.POST.get('rumble_accounts')  # Default to YouTube video title if not provided
         input_rumble_video_primary_categories = request.POST.get('rumble_video_primary_categories')  # Default to YouTube video title if not provided
         input_rumble_video_secondary_categories = request.POST.get('rumble_video_secondary_categories')  # Default to YouTube video description if not provided
+        input_rumble_rumble_video_management = request.POST.get('rumble_video_management')  # Default to YouTube video description if not provided
         input_rumble_tags = request.POST.get('rumble_tags')  # Default to YouTube video description if not provided
         input_rumble_video_visibility = request.POST.get('rumble_video_visibility')  # Default to YouTube video description if not provided
 
@@ -157,6 +159,7 @@ def convert_video(request, youtube_video_pk):
             rumble_video_url = youtube_video.youtube_video_url,
             rumble_primary_category = input_rumble_video_primary_categories,
             rumble_secondary_category = input_rumble_video_secondary_categories,
+            rumble_licensing_options = input_rumble_rumble_video_management,
             rumble_rumble_tags = input_rumble_tags,
             rumble_upload_date = youtube_video.youtube_video_upload_date,
             rumble_visibility = input_rumble_video_visibility,
@@ -345,6 +348,7 @@ def run_rumble_script(request, pk):
             "videoTags": rumble_video.rumble_rumble_tags,
             "videoCategory": rumble_video.rumble_primary_category,
             "rumble_video_visibility": rumble_video.rumble_visibility,
+            "rumble_video_licensing_options": rumble_video.rumble_licensing_options,
             "videoSecondCategory": rumble_video.rumble_secondary_category,
             "rumble_video_file": rumble_video_absolute_path,
         })

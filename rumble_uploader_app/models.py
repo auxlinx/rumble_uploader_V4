@@ -68,6 +68,12 @@ VISIBILITY_CHOICES = [
         ('scheduled', 'Scheduled'),
     ]
 
+RUMBLE_VIDEO_MANAGEMENT = [
+        ('rumble video_management exclusive', 'Rumble Video Management Exclusive'),
+        ('rumble video_management non exclusive', 'Rumble Video Management Non Exclusive'),
+        ('rumble video_management rumble only', 'Rumble Video Management Rumble Only'),
+    ]
+
 RUMBLE_ACCOUNT_CHOICES = [
     ("randomrumblevideos", "randomrumblevideos"),
     ("rumblearchives", "rumblearchives"),
@@ -84,6 +90,7 @@ class RumbleVideo(models.Model):
     rumble_rumble_tags = models.CharField(max_length=200, null=True)
     rumble_upload_date = models.DateTimeField(auto_now_add=True, null=True)
     rumble_visibility = models.CharField(max_length=100, null=True, choices=VISIBILITY_CHOICES, default='Private')
+    rumble_licensing_options = models.CharField(max_length=100, null=True, choices=RUMBLE_VIDEO_MANAGEMENT, default='Rumble Video Management Exclusive')
     rumble_video_file = models.FileField(upload_to='videos/', null=True)
     rumble_thumbnail = models.ImageField(upload_to='thumbnails/', null=True, blank=True, validators=[validate_image_type])
     rumble_direct_link = models.TextField(null=True, blank=True)

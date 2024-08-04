@@ -496,6 +496,7 @@ def upload_to_rumble(rumble_video_script_serialized_data):
         return absolute_path
 
     rumble_video_file_upload = find_file(rumble_video_file, file_path)
+    print(rumble_video_file_upload)
 
     # Configure logging
     logging.basicConfig(filename='rumble_uploader_error.log', level=logging.ERROR, format='%(asctime)s:%(levelname)s:%(message)s')
@@ -556,15 +557,15 @@ def upload_to_rumble(rumble_video_script_serialized_data):
     class UploadFileException(Exception):
         pass
 
-    def upload_file(driver, file_path, short_wait_time):
+    def upload_file(driver, rumble_video_file_upload, short_wait_time):
         max_attempts = 3  # Number of retries
         attempts = 0
 
         while attempts < max_attempts:
             try:
                 file_input = WebDriverWait(driver, short_wait_time).until(EC.presence_of_element_located((By.XPATH, '//input[@type="file"]')))
-                file_input.send_keys(file_path)
-                print(f"File {file_path} uploaded successfully.")
+                file_input.send_keys(rumble_video_file_upload)
+                print(f"File {rumble_video_file_upload} uploaded successfully.")
                 return True
 
             except NoSuchElementException as e:

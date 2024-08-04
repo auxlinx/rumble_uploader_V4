@@ -359,7 +359,7 @@ def run_rumble_script(request, pk):
         except json.JSONDecodeError as e:
             # If an error occurs, the string is not properly formatted as JSON
             print(f"The string is not properly formatted as JSON: {e}")
-        success = upload_to_rumble(rumble_video_script_serialized_data)
+        success = upload_to_rumble(rumble_video_script_serialized_data, headless=True)
 
         if success:
             # If the script runs successfully, add a success message

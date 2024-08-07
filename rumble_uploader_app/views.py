@@ -343,13 +343,13 @@ def run_rumble_script(request, pk):
         rumble_video_script_data = ({
             "rumble_video_pk": rumble_video.pk,
             "rumble_account": rumble_video.rumble_account,
-            "videoTitle": rumble_video.rumble_video_title,
-            "videoDescription": rumble_video.rumble_video_description,
-            "videoTags": rumble_video.rumble_rumble_tags,
-            "videoCategory": rumble_video.rumble_primary_category,
-            "rumble_video_visibility": rumble_video.rumble_visibility,
-            "rumble_video_licensing_options": rumble_video.rumble_licensing_options,
-            "videoSecondCategory": rumble_video.rumble_secondary_category,
+            "rumble_video_title": rumble_video.rumble_video_title,
+            "rumble_video_description": rumble_video.rumble_video_description,
+            "rumble_rumble_tags": rumble_video.rumble_rumble_tags,
+            "rumble_primary_category": rumble_video.rumble_primary_category,
+            "rumble_secondary_category": rumble_video.rumble_secondary_category,
+            "rumble_visibility": rumble_video.rumble_visibility,
+            "rumble_licensing_options": rumble_video.rumble_licensing_options,
             "rumble_video_file": rumble_video_absolute_path,
         })
         try:

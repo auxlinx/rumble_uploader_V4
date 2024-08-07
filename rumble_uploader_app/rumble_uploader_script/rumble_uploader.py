@@ -16,38 +16,38 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import ( NoSuchElementException, TimeoutException, WebDriverException)
-from dotenv import load_dotenv
+
 from django.core.exceptions import ObjectDoesNotExist
-# Import only necessary elements
-from rumble_uploader_script_html_elements import (
+from .rumble_uploader_script_html_elements import (
     rumble_username_field_input,
     rumble_password_field_input,
     rumble_login_button,
-    rumble_upload_video_button,
-    rumble_upload_file,
     rumble_video_title_input,
     rumble_video_description_input,
     rumble_video_categories_input,
     rumble_video_secondary_categories_input,
     rumble_video_tag_input,
-    visibility_option_selector_public,
-    visibility_option_selector_unlisted,
-    visibility_option_selector_private,
     rumble_upload_button,
-    rumble_video_management_button_exclusive_selector,
-    rumble_video_management_button_non_exclusive_selector,
-    rumble_video_management_button_rumble_only_selector,
     rumble_terms_and_conditions1,
     rumble_terms_and_conditions2,
     rumble_submit_button,
     rumble_direct_link,
     rumble_embed_code,
-    rumble_monetized_embed_code,
-    rumble_video_uploader_progress_selector
+    rumble_monetized_embed_code
 )
-from rumble_uploader_script_input_functions import safe_send_keys, safe_click, safe_tags, safe_click_javascript, copy_rumble_video_links
-from rumble_uploader_app.models import RumbleVideo
 
+from .rumble_uploader_script_input_functions import (
+    safe_send_keys,
+    safe_click,
+    safe_tags,
+    safe_click_javascript,
+    copy_rumble_video_links
+)
+
+from .rumble_uploader_script_login import get_rumble_credentials
+from .rumble_uploader_script_rumble_visibility import rumble_visibility
+from .rumble_uploader_script_rumble_licensing_options import rumble_licensing_options
+from rumble_uploader_app.models import RumbleVideo
 
 # Setup basic logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -70,7 +70,6 @@ def upload_to_rumble(rumble_video_script_serialized_data, headless=True):
     else:
         logging.error("rumble_video_script_serialized_data is empty.")
         rumble_video_data = {}  # Provide a default value or handle the error as needed
-
 
     # Setup Chrome options
     options = webdriver.ChromeOptions()
@@ -99,33 +98,7 @@ def upload_to_rumble(rumble_video_script_serialized_data, headless=True):
 
     time.sleep(short_wait_time)  # Wait for 10 seconds
 
-    env_file_path = r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\.env'
-    load_dotenv(env_file_path)
-
-    # Assuming rumble_account holds the account identifier
-    rumble_account = rumble_video_data["rumble_account"]
-    # Dynamically construct the environment variable names
-    rumble_username_env_var = f'RUMBLE_USERNAME_{rumble_account}'
-    rumble_password_env_var = f'RUMBLE_PASSWORD_{rumble_account}'
-
-    # Access the environment variables to get the username and password
-    rumble_username = os.getenv(rumble_username_env_var)
-    rumble_password = os.getenv(rumble_password_env_var)
-
-        # Strip any leading or trailing whitespace
-    if rumble_password:
-        rumble_password = rumble_password.replace('"', '')
-
-    if rumble_username is None:
-        logging.error("Rumble username environment variable not found.")
-        # Handle the error as needed, e.g., provide a default value or exit the script
-
-    if rumble_password is None:
-        logging.error("Rumble password environment variable not found.")
-        # Handle the error as needed, e.g., provide a default value or exit the script
-
-    print(rumble_username)
-    print(rumble_password)
+    rumble_username, rumble_password = get_rumble_credentials(rumble_video_data)
 
     # Sign in to Rumble account
 
@@ -152,33 +125,8 @@ def upload_to_rumble(rumble_video_script_serialized_data, headless=True):
     rumble_video_visibility_setting = rumble_video_data["rumble_video_visibility"]
     rumble_video_licensing_setting = rumble_video_data["rumble_video_licensing_options"]
 
-    # Rumble video visibility settings
-    def rumble_visibility(visibility_setting):
-        video_visibility_option_selection = None
-
-        if visibility_setting == "Private":
-            video_visibility_option_selection = visibility_option_selector_private
-        elif visibility_setting == "Public":
-            video_visibility_option_selection = visibility_option_selector_public
-        elif visibility_setting == "Unlisted":
-            video_visibility_option_selection = visibility_option_selector_unlisted
-        return video_visibility_option_selection
-
-
     # Now call the function with the correct argument
     visibility_option = rumble_visibility(rumble_video_visibility_setting)
-
-    # Rumble video visibility settings
-    def rumble_licensing_options(licensing_options):
-        rumble_licensing_options_selection = None
-
-        if licensing_options == "Rumble Video Management Exclusive":
-            rumble_licensing_options_selection= rumble_video_management_button_exclusive_selector
-        elif licensing_options == "Rumble Video Management Non Exclusive":
-            rumble_licensing_options_selection= rumble_video_management_button_non_exclusive_selector
-        elif licensing_options == "Rumble Video Management Rumble Only":
-            rumble_licensing_options_selection= rumble_video_management_button_rumble_only_selector
-        return rumble_licensing_options_selection
 
     # Now call the function with the correct argument
     licensing_option = rumble_licensing_options(rumble_video_licensing_setting)
@@ -199,11 +147,9 @@ def upload_to_rumble(rumble_video_script_serialized_data, headless=True):
     rumble_video_file_upload = find_file(rumble_video_file, file_path)
     print(rumble_video_file_upload)
 
-    # Configure logging
-    logging.basicConfig(filename='rumble_uploader_error.log', level=logging.ERROR, format='%(asctime)s:%(levelname)s:%(message)s')
 
 
-# Assuming 'rumble_video_file_upload' contains the path to your file
+    # Assuming 'rumble_video_file_upload' contains the path to your file
     def check_file_permissions(rumble_video_file_upload):
         # Check if the file exists
         if not os.path.exists(rumble_video_file_upload):
@@ -249,6 +195,9 @@ def upload_to_rumble(rumble_video_script_serialized_data, headless=True):
         current_user = getpass.getuser()
         print("Selenium script is operating under user:", current_user)
         print("File not found or not accessible. Please check the file path and permissions.")
+
+
+    rumble_video_file_upload = find_file(rumble_video_file, file_path)
 
     print("New upload started!")
     driver.get("https://rumble.com/upload.php")

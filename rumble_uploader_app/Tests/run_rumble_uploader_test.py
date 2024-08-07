@@ -1,16 +1,20 @@
 """
 This module is responsible for running the rumble uploader test.
 """
+import unittest
 import sys
 import os
+
 from rumble_uploader_app.rumble_uploader_script.rumble_uploader import upload_to_rumble
 
-# Add the parent directory of rumble_uploader_app to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+# Add the parent directory to the sys.path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
-# sys.path.append(r'D:\Proton Drive Backup\rahw_coding_mobile\aux_coding\rumble_uploader\rumble_uploader_V4\rumble_uploader_app')
 
-test_rumble_video_script_data = ({
+class TestUploadToRumble(unittest.TestCase):
+    def test_upload_to_rumble_headless_false(self):
+        # Define the test data
+        test_rumble_video_script_data = {
             "rumble_account": "randomrumblevideos",
             "videoTitle": "test",
             "videoDescription": "test",
@@ -20,8 +24,15 @@ test_rumble_video_script_data = ({
             "rumble_video_file": "videos/test.mp4",
             "rumble_video_visibility_setting": "Private",
             "rumble_video_licensing_setting": "Rumble Video Management Exclusive",
-        })
+        }
 
+        # Call the function with headless=False
+        upload_to_rumble(test_rumble_video_script_data, headless=False)
 
-# Call the function
-upload_to_rumble(test_rumble_video_script_data, headless=False)
+        # Add assertions here to verify the expected behavior
+        # For example, you can check if certain files were created or certain logs were generated
+        # This is a placeholder as the actual assertions will depend on the function's behavior
+        # self.assertTrue(True)
+
+if __name__ == '__main__':
+    unittest.main()

@@ -1,7 +1,6 @@
 import time
 import sys
 import logging
-
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (ElementClickInterceptedException, NoSuchElementException,
@@ -23,7 +22,7 @@ def safe_send_keys(driver, html_element, locator, keys):
     :return: True if the keys are successfully sent, False otherwise.
     """
     attempts = 0
-    timeout = 10
+    timeout = 20  # Increased timeout
     max_attempts = 3
     screenshot_name = None
     while attempts < max_attempts:
@@ -38,24 +37,23 @@ def safe_send_keys(driver, html_element, locator, keys):
             logging.info("Successfully sent keys to element: %s", locator)
             return True
 
-        except ElementNotInteractableException:
-            logging.error("Element not interactable at the moment.")
+        except (ElementNotInteractableException, NoSuchElementException, TimeoutException) as e:
+            error_message = str(e)
+            logging.error("Error encountered: %s. Selector: %s", error_message, locator)
+            screenshot_name = f"{locator.replace('>', '_').replace(' ', '')}_debug_screenshot.png"
             driver.get_screenshot_as_file(screenshot_name)
             attempts += 1
-        except NoSuchElementException:
-            driver.get_screenshot_as_file(screenshot_name)
-            attempts += 1
-        except TimeoutException:
-            logging.error("Timeout waiting for element to be clickable. Selector: %s", locator)
-            if screenshot_name is None:
-                screenshot_name = f"{locator.replace('>', '_').replace(' ', '')}_debug_screenshot.png"
-                driver.get_screenshot_as_file(screenshot_name)
-                attempts += 1
-        logging.info("Retry %s/%s for selector: %s", attempts, max_attempts, locator)
-        logging.error("Failed to add keys after %s max_attempts. Selector: %s", max_attempts, locator)
-        if attempts >= max_attempts:
-            print("Max attempts reached, exiting script.")
-            sys.exit(1)  # Exit the script with an error status
+            if isinstance(e, ElementNotInteractableException):
+                logging.error("Element not interactable at the moment. Attempt: %s", attempts)
+            elif isinstance(e, NoSuchElementException):
+                logging.error("No such element found. Attempt: %s", attempts)
+            elif isinstance(e, TimeoutException):
+                logging.error("Timeout waiting for element to be clickable. Selector: %s", locator)
+            logging.info("Retry %s/%s for selector: %s", attempts, max_attempts, locator)
+            if attempts >= max_attempts:
+                print("Max attempts reached, exiting script.")
+                sys.exit(1)  # Exit the script with an error status
+    logging.error("Failed to send keys after %s attempts. Selector: %s", max_attempts, locator)
     return False
 
 
@@ -87,8 +85,8 @@ def safe_click(driver, html_element, locator):
                     locator_str = "_".join(str(item) for item in locator).replace('>', '_').replace(' ', '')
                 else:
                     locator_str = str(locator).replace('>', '_').replace(' ', '')
-                    screenshot_name = f"{locator_str}_debug_screenshot.png"
-                    driver.get_screenshot_as_file(screenshot_name)
+                screenshot_name = f"{locator_str}_debug_screenshot.png"
+            driver.get_screenshot_as_file(screenshot_name)
             # Attempt to click using JavaScript
             try:
                 element = driver.execute_script(f'return document.querySelector("{locator}");')
@@ -98,13 +96,14 @@ def safe_click(driver, html_element, locator):
                 )
                 return True  # Return True if the JavaScript click is successful
             except WebDriverException as js_e:
+                driver.get_screenshot_as_file(screenshot_name)
                 logging.error("JavaScript click failed: %s. Selector: %s", str(js_e), locator)
                 attempts += 1
             if isinstance(e, (NoSuchElementException, TimeoutException)):
+                driver.get_screenshot_as_file(screenshot_name)
                 attempts += 1
                 logging.info("Retry %s/%s for selector: %s", attempts, max_attempts, locator)
                 continue
-                logging.error("Failed to click after %s max_attempts. Selector: %s", max_attempts, locator)
         if attempts >= max_attempts:
             print("Max attempts reached, exiting script.")
             sys.exit(1)  # Exit the script with an error status
